@@ -313,7 +313,7 @@ public class DesignAdd {
             }
         }
         
-        GRID.add(BACKBTN, 0, 6);
+        GRID.add(BACKBTN, 0, 10);
         
         return GRID;
     }
@@ -392,6 +392,4 @@ public class DesignAdd {
         GRID.add(CANCEL, 0, 1);
         return GRID;
     }
-    
-    
 }

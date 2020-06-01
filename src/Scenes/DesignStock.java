@@ -10,6 +10,7 @@ import controllers.PerformanceController;
 import controllers.ToolsUse;
 import java.io.IOException;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -23,6 +24,7 @@ import javafx.stage.Stage;
 public class DesignStock {
     private Text CODETXT, PRICETXT, AMNTTXT, DATETXT, REATXT, CODE, PRICE, AMOUNT, DATE, REASON;
     private Text TOTALPERFTXT, PERCENTAGEPERFTXT, PERSTOCKPERFTXT, TOTALPERF, PERCENTAGEPERF, PERSTOCKPERF;
+    private Button DELETEBTN, SOLDBTN, GRAPHBTN;
     
     private MyFont MYFONT;
     private ToolsUse TOOLS;
@@ -99,6 +101,18 @@ public class DesignStock {
             PERCENTAGEPERF.setFill(Color.CHARTREUSE);
         }
         
+        DELETEBTN = new Button("Delete");
+        DELETEBTN.setFont(MYFONT.getOswaldButton());
+        DELETEBTN.getStyleClass().add("submitButton");
+        
+        SOLDBTN = new Button("Sold");
+        SOLDBTN.setFont(MYFONT.getOswaldButton());
+        SOLDBTN.getStyleClass().add("submitButton");
+        
+        GRAPHBTN = new Button("Graph");
+        GRAPHBTN.setFont(MYFONT.getOswaldButton());
+        GRAPHBTN.getStyleClass().add("submitButton");
+        
         GRID.add(CODETXT, 0, 0);
         GRID.add(PRICETXT, 0, 1);
         GRID.add(AMNTTXT, 0, 2);
@@ -118,10 +132,14 @@ public class DesignStock {
         GRID.add(TOTALPERF, 2, 7);
         GRID.add(PERCENTAGEPERF, 2, 8);
         
+        GRID.add(DELETEBTN, 3, 8);
+        GRID.add(SOLDBTN, 3, 7);
+        GRID.add(GRAPHBTN, 3, 0);
+        
         GRID.setVgap(15);
         GRID.setHgap(25);
         
-        GRID.setPadding(new Insets(0, 0, 50, 75));
+        GRID.setPadding(new Insets(0, 0, 50, 65));
         
         return GRID;
     }
