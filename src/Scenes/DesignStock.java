@@ -28,7 +28,7 @@ public class DesignStock {
     private ToolsUse TOOLS;
     private PerformanceController PERFCONTROL;
     
-    public GridPane DesignStock(Stage MAINWINDOW, GridPane GRID, String TICKER) throws IOException, ApiException{
+    public GridPane DesignStock(GridPane GRID, String TICKER) throws IOException, ApiException{
         MYFONT = new MyFont();
         TOOLS = new ToolsUse();
         PERFCONTROL = new PerformanceController();

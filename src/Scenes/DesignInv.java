@@ -68,7 +68,7 @@ public class DesignInv {
                    int LASTBUTTON = BUTTONID;                
                    try {
                         DSSTOCK = new DesignStock();
-                        DSSTOCK.DesignStock(MAINWINDOW, GRID,((Button) e.getSource()).getText());
+                        DSSTOCK.DesignStock(GRID,((Button) e.getSource()).getText());
                     } catch (IOException ex) {
                         System.out.println("PROBLEMS");
                     } catch (ApiException ex) {
@@ -96,7 +96,7 @@ public class DesignInv {
                     int LASTBUTTON = BUTTONID;                
                     try {
                         DSSTOCK = new DesignStock();
-                        DSSTOCK.DesignStock(MAINWINDOW, GRID,((Button) e.getSource()).getText());
+                        DSSTOCK.DesignStock(GRID,((Button) e.getSource()).getText());
                     } catch (IOException ex) {
                         System.out.println("PROBLEMS");
                     } catch (ApiException ex) {

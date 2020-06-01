@@ -20,12 +20,12 @@ public class DesignAddManagement {
     
     public void InvestmentCreated(GridPane GRID, String TICKER, Stage MAINWINDOW, VBox TOP){
         DSADD = new DesignAdd();
-        DSADD.DesignAddCreatedInvestment(GRID, TICKER, MAINWINDOW, TOP);
+        DSADD.DesignAddCreatedInvestment(GRID, TICKER, TOP);
     }
     
-    public void DesignAddDefault(GridPane GRID, Stage MAINWINDOW, VBox TOP) throws IOException{
+    public void DesignAddDefault(GridPane GRID, VBox TOP) throws IOException{
         DSADD = new DesignAdd();
-        DSADD.DesignAdd(GRID, MAINWINDOW, TOP);
+        DSADD.DesignAdd(GRID, TOP);
     }
     
 }

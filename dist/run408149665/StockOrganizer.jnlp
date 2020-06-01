@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="StockOrganizer.jar" size="115614" download="eager" />
+    <jar href="StockOrganizer.jar" size="117190" download="eager" />
     <jar href="lib/gson-2.8.1.jar" size="232620" download="eager" />
     <jar href="lib/gson-fire-1.8.0.jar" size="71301" download="eager" />
     <jar href="lib/hamcrest-core-1.3.jar" size="45024" download="eager" />

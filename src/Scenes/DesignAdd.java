@@ -9,8 +9,10 @@ import WindowManagement.DesignAddManagement;
 import WindowManagement.TopManagement;
 import com.intrinio.invoker.ApiException;
 import controllers.InvestmentController;
+import controllers.NewInvestmentProcessor;
 import controllers.ToolsUse;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -33,8 +35,8 @@ import javafx.stage.Stage;
 public class DesignAdd {
     private Text CODETXT, PRICETXT, AMNTTXT, DATETXT, REATXT, TITLE, MESSAGE;
     private TextField PRC, AMNT, MYDATE, REASON;
-    private String[]/* MSG*/ FIELDSINFO /*TEXTFIELDS FORMATMSG*/;
-    private Button SUBBTN;
+    private String[] FIELDSINFO;
+    private Button SUBBTN, BACKBTN;
     private RadioButton NYSE, NASDAQ, CONTINUE, ADDANOTHER;
     private ToggleGroup GROUP;
     private HBox EXCHANGES;
@@ -48,12 +50,14 @@ public class DesignAdd {
     private TopManagement TOPMANAGE;
     private Design DESIGN;
     private DesignStock DSSTOCK;
+    private NewInvestmentProcessor PROCESSOR;
 
-    public GridPane DesignAdd(GridPane GRID, Stage MAINWINDOW, VBox TOP) throws IOException{
+    public GridPane DesignAdd(GridPane GRID, VBox TOP) throws IOException{
         DESIGN = new Design();
         INVESTCONTROL = new InvestmentController();
         MYFONT = new MyFont();
         MANAGE = new DesignAddManagement();
+        PROCESSOR = new NewInvestmentProcessor();
         
         GRID.setVgap(30);
         GRID.setHgap(40);
@@ -95,6 +99,33 @@ public class DesignAdd {
         
         GRID.add(EXCHANGES, 1, 1);
         
+        SUBBTN = new Button("Submit");
+        SUBBTN.setFont(MYFONT.getOswaldButton());
+        SUBBTN.getStyleClass().add("submitButton");
+        SUBBTN.setOnAction(e->{
+            String TICKER = COMBO.getSelectionModel().getSelectedItem().toString();
+            FIELDSINFO[0] = TICKER;
+            FIELDSINFO[1] = PRC.getText();
+            FIELDSINFO[2] = AMNT.getText();
+            FIELDSINFO[3] = MYDATE.getText();
+            FIELDSINFO[4] = REASON.getText();
+            GRID.getChildren().clear();
+            try {
+                PROCESSOR.createInvestment(
+                        FIELDSINFO[0],
+                        FIELDSINFO[1],
+                        FIELDSINFO[2],
+                        FIELDSINFO[3],
+                        FIELDSINFO[4],
+                        "000000",
+                        GRID,
+                        TOP
+                        );
+            } catch (IOException ex) {
+                Logger.getLogger(DesignAdd.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        
         COMBO = new ComboBox();
                
         GROUP = new ToggleGroup();
@@ -110,6 +141,7 @@ public class DesignAdd {
             } catch (IOException ex) {
                 Logger.getLogger(DesignAdd.class.getName()).log(Level.SEVERE, null, ex);
             }
+            GRID.add(SUBBTN, 2, 5);
             GRID.add(COMBO, 1, 1);
         });
         NYSE.getStyleClass().add("radioButtons");
@@ -125,37 +157,12 @@ public class DesignAdd {
             } catch (IOException ex) {
                 Logger.getLogger(DesignAdd.class.getName()).log(Level.SEVERE, null, ex);
             }
+            GRID.add(SUBBTN, 2, 5);
             GRID.add(COMBO, 1, 1);
         });
         NASDAQ.getStyleClass().add("radioButtons");
         
         FIELDSINFO = new String[5];
-        SUBBTN = new Button("Submit");
-        SUBBTN.setFont(MYFONT.getOswaldButton());
-        SUBBTN.getStyleClass().add("submitButton");
-        SUBBTN.setOnAction(e->{
-            String TICKER = COMBO.getSelectionModel().getSelectedItem().toString();
-            FIELDSINFO[0] = TICKER;
-            FIELDSINFO[1] = PRC.getText();
-            FIELDSINFO[2] = AMNT.getText();
-            FIELDSINFO[3] = MYDATE.getText();
-            FIELDSINFO[4] = REASON.getText();
-            
-            try {
-                INVESTCONTROL.createInvestment(
-                        FIELDSINFO[0],
-                        FIELDSINFO[1],
-                        FIELDSINFO[2],
-                        FIELDSINFO[3],
-                        FIELDSINFO[4],
-                        "000000"
-                        );
-            } catch (IOException ex) {
-                Logger.getLogger(DesignAdd.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            GRID.getChildren().clear();
-            MANAGE.InvestmentCreated(GRID, TICKER, MAINWINDOW, TOP);
-        });
        
         EXCHANGES.getChildren().addAll(NYSE, NASDAQ);
         
@@ -164,7 +171,6 @@ public class DesignAdd {
         GRID.add(AMNTTXT, 0, 3);
         GRID.add(DATETXT, 0, 4);
         GRID.add(REATXT, 0, 5);
-        GRID.add(SUBBTN, 2, 5);
         
         GRID.add(PRC, 1, 2);
         GRID.add(AMNT, 1, 3);
@@ -174,11 +180,10 @@ public class DesignAdd {
         return GRID;
     }
     
-    public GridPane DesignAddCreatedInvestment (GridPane GRID, String TICKER, Stage MAINWINDOW, VBox TOP){
+    public GridPane DesignAddCreatedInvestment (GridPane GRID, String TICKER, VBox TOP){
         MYFONT = new MyFont();
         MANAGE = new DesignAddManagement();
         TOPMANAGE = new TopManagement();
-        DESIGN = new Design(MAINWINDOW);
         DSSTOCK = new DesignStock();
         
         String TEXT = "";
@@ -199,7 +204,7 @@ public class DesignAdd {
             TOPMANAGE.ChangeTop(TOP, TEXT2);
             try {
                 try {
-                    DSSTOCK.DesignStock(MAINWINDOW, GRID, TICKER);
+                    DSSTOCK.DesignStock(GRID, TICKER);
                 } catch (ApiException ex) {
                     Logger.getLogger(DesignAdd.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -215,7 +220,7 @@ public class DesignAdd {
         ADDANOTHER.setOnAction(e ->{
             GRID.getChildren().clear();
             try {
-                MANAGE.DesignAddDefault(GRID, MAINWINDOW, TOP);
+                MANAGE.DesignAddDefault(GRID, TOP);
             } catch (IOException ex) {
                 Logger.getLogger(DesignAdd.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -226,6 +231,89 @@ public class DesignAdd {
         
         GRID.add(MESSAGE, 0, 0);
         GRID.add(CHOICES, 0, 1);
+        
+        return GRID;
+    }
+    
+    public GridPane DesignAddWrongfulInputs (GridPane GRID, String[] BLANK, boolean[] CORRECT, Integer INDEX, VBox TOP){
+        MYFONT = new MyFont();
+        
+        BACKBTN = new Button("Back");
+        BACKBTN.setFont(MYFONT.getOswaldButton());
+        BACKBTN.getStyleClass().add("submitButton");
+        BACKBTN.setOnAction(e ->{
+            GRID.getChildren().clear();
+            try {
+                DesignAdd(GRID, TOP);
+            } catch (IOException ex) {
+                Logger.getLogger(DesignAdd.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        
+        GRID.setPadding(new Insets(0, 50, 50, 70));
+        
+        Text MSG1 = new Text("Please input price as a double");
+        MSG1.setFont(MYFONT.getOswaldRegular());
+        Text MSG2 = new Text("Please input amount as an integer");
+        MSG2.setFont(MYFONT.getOswaldRegular());
+        
+        Text MSG3 = new Text("Please don't leave" + Arrays.toString(BLANK).replace("[", " ").replace("]", " ") + "blank");
+        MSG3.setFont(MYFONT.getOswaldRegular());
+                
+        System.out.println(BLANK[0]);
+        
+        if(BLANK.length > 0){
+            for(int i =0; i < BLANK.length; i++){
+                if(BLANK[i].equals("price")){
+                    if(BLANK[i+1].equals("amount")){
+                        GRID.add(MSG3, 0, 0);
+                        break;
+                    }
+                    else if(CORRECT[1]){
+                        GRID.add(MSG3, 0, 0);
+                        GRID.add(MSG2, 0, 1);
+                        break;
+                    }else{
+                        GRID.add(MSG3, 0, 0);
+                        GRID.add(MSG1, 0, 1);
+                        break;
+                    }
+                }else if(CORRECT[0]){
+                    if(CORRECT[1]){
+                        GRID.add(MSG3, 0, 0);
+                        GRID.add(MSG1, 0, 1);
+                        GRID.add(MSG2, 0, 2);
+                        break;
+                    }else{
+                       GRID.add(MSG3, 0, 0);
+                       GRID.add(MSG1, 0, 1);  
+                       break;
+                    }
+                }else if(CORRECT[1]){
+                    GRID.add(MSG3, 0, 0);
+                    GRID.add(MSG2, 0, 1);
+                    break;
+                }else{
+                    GRID.add(MSG3, 0, 0);
+                    break;
+                }
+            }
+        }else{
+            if(CORRECT[0]){
+                if(CORRECT[1]){
+                    GRID.add(MSG1, 0, 0);
+                    GRID.add(MSG2, 0, 1);
+                }else{
+                    GRID.add(MSG1, 0, 0);
+                }
+            }else{
+                if(CORRECT[1]){
+                    GRID.add(MSG2, 0, 0);
+                }
+            }
+        }
+        
+        GRID.add(BACKBTN, 0, 6);
         
         return GRID;
     }

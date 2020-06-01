@@ -78,7 +78,7 @@ public class Design {
             SUBMAIN.getChildren().clear();
             TOPMANAGE.ChangeTop(TOP, "Add investment");
             try {
-                DSADD.DesignAdd(SUBMAIN, MAINWINDOW, TOP);
+                DSADD.DesignAdd(SUBMAIN, TOP);
             } catch (IOException ex) {
                 Logger.getLogger(Design.class.getName()).log(Level.SEVERE, null, ex);
             }
