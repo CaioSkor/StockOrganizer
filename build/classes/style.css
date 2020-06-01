@@ -1,0 +1,113 @@
+@font-face{
+    src: url("/fonts/Oswald-Regular.ttf");
+}
+
+.navBar{
+    -fx-background-color: #999999;
+}
+
+.navBarButtons{
+    -fx-border-style: none;
+    -fx-background-color: #999999;
+    -fx-text-fill: whitesmoke;
+}
+
+.navBarButtons:pressed{
+    -fx-background-color: #cc0000ff;
+}
+
+.submitTextfields{
+    -fx-text-fill: whitesmoke;
+    -fx-border-style: none;
+    -fx-background-color: silver;
+}
+
+.radioButtons .radio{
+    -fx-border-style: none;
+    -fx-background-color: silver;
+}
+
+.radioButtons .radio:pressed{
+    -fx-border-style: none;
+    -fx-background-color: #cc0000ff;
+}
+
+.stockButtons{
+    -fx-border-style:none;
+    -fx-background-color: silver;
+    -fx-text-fill: whitesmoke;    
+}
+
+.stockButtons:pressed{
+    -fx-background-color: #cc0000ff;
+}
+
+.submitButton{
+    -fx-border-style:none;
+    -fx-background-color: #e9e9e9;
+    -fx-text-fill: #cc0000ff;    
+}
+
+.submitButton:pressed{
+    -fx-background-color: #cc0000ff;
+    -fx-text-fill: #e9e9e9;    
+}
+
+.combo-box-base{
+    -fx-background-color: silver;
+}
+
+.combo-box-base:pressed{
+    -fx-background-color:  #cc0000ff;
+}
+
+.combo-box-base .arrow{
+    -fx-background-color:  #cc0000ff;
+}
+
+.combo-box-base:pressed .arrow{
+    -fx-background-color: silver;
+}
+
+.combo-box-popup .list-view{
+    -fx-background-color: aliceblue;
+    -fx-border-style: none;
+}
+
+.combo-box .list-cell{
+    -fx-text-fill: whitesmoke;   
+    -fx-font-family: "Oswald";
+}
+
+.combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell {
+    -fx-background-color: silver;
+}
+
+.combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:pressed {
+    -fx-background-color: #cc0000ff !important;
+}
+
+.combo-box-popup .scroll-bar:vertical .track{
+    -fx-background-color: #999999;
+    -fx-border-color: transparent;
+}
+
+.combo-box-popup .scroll-bar:vertical .increment-button,
+.combo-box-popup .scroll-bar:vertical .decrement-button{
+    -fx-background-color: #999999;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-padding:0 10 0 0;
+}
+
+.combo-box-popup .scroll-bar:vertical .increment-arrow,
+.combo-box-popup .scroll-bar:vertical .decrement-arrow{
+    -fx-shape: " ";	
+    -fx-padding:0;
+}
+
+.combo-box-popup .scroll-bar:vertical .thumb {
+    -fx-background-color:#cc0000ff;
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 0em;
+}
