@@ -37,7 +37,7 @@ public class DesignAdd {
     private TextField PRC, AMNT, MYDATE, REASON;
     private String[] FIELDSINFO;
     private Button SUBBTN, BACKBTN;
-    private RadioButton NYSE, NASDAQ, CONTINUE, ADDANOTHER;
+    private RadioButton NYSE, NASDAQ, CONTINUE, ADDANOTHER, CANCEL;
     private ToggleGroup GROUP;
     private HBox EXCHANGES;
     private VBox CHOICES;
@@ -315,6 +315,81 @@ public class DesignAdd {
         
         GRID.add(BACKBTN, 0, 6);
         
+        return GRID;
+    }
+    
+    public GridPane DesignAddDeleted(GridPane GRID, VBox TOP, String TICKER, String OLDPRICE, String OLDAMOUNT, String OLDDATE, String OLDREASON, String OLDDELDATE, String NEWPRICE, String NEWAMOUNT, String NEWDATE, String NEWREASON ) throws IOException{
+        INVESTCONTROL = new InvestmentController();
+        MYFONT = new MyFont();
+        
+        GROUP = new ToggleGroup();
+        
+        CONTINUE = new RadioButton("Recover Investment");
+        CONTINUE.setFont(MYFONT.getOswaldButton());
+        CONTINUE.getStyleClass().add("radioButtons");
+        CONTINUE.setToggleGroup(GROUP);
+        CONTINUE.setOnAction(e ->{
+            try {
+                GRID.getChildren().clear();
+                INVESTCONTROL.recoverDeletedInvestment(TICKER, OLDPRICE, OLDAMOUNT, OLDDATE, OLDREASON, OLDDELDATE, NEWPRICE, NEWAMOUNT, NEWDATE, NEWREASON);
+                DesignAddCreatedInvestment(GRID, TICKER, TOP);
+            } catch (IOException ex) {
+                Logger.getLogger(DesignAdd.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        
+        CANCEL = new RadioButton("Cancel");
+        CANCEL.setFont(MYFONT.getOswaldButton());
+        CANCEL.getStyleClass().add("radioButtons");
+        CANCEL.setToggleGroup(GROUP);
+        CANCEL.setOnAction(e ->{
+            GRID.getChildren().clear();
+            try {
+                DesignAdd(GRID, TOP);
+            } catch (IOException ex) {
+                Logger.getLogger(DesignAdd.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        GRID.add(CONTINUE, 0, 0);
+        GRID.add(CANCEL, 0, 1);
+        
+        return GRID;
+    }
+    
+    public GridPane DesignAddUpdate(GridPane GRID, VBox TOP, String TICKER, String OLDPRICE,String  OLDAMOUNT,String OLDDATE,String OLDREASON,String NEWPRICE,String NEWAMOUNT,String NEWDATE,String NEWREASON) throws IOException{
+        INVESTCONTROL = new InvestmentController();
+        MYFONT = new MyFont();
+        
+        GROUP = new ToggleGroup();
+        
+        CONTINUE = new RadioButton("Update Investment");
+        CONTINUE.setFont(MYFONT.getOswaldButton());
+        CONTINUE.getStyleClass().add("radioButtons");
+        CONTINUE.setToggleGroup(GROUP);
+        CONTINUE.setOnAction(e ->{
+            try {
+                GRID.getChildren().clear();
+                INVESTCONTROL.updateInvestment(TICKER, OLDPRICE, OLDAMOUNT, OLDDATE, OLDREASON, NEWPRICE, NEWAMOUNT, NEWDATE, NEWREASON, "000000");
+                DesignAddCreatedInvestment(GRID, TICKER, TOP);
+            } catch (IOException ex) {
+                Logger.getLogger(DesignAdd.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        
+        CANCEL = new RadioButton("Cancel");
+        CANCEL.setFont(MYFONT.getOswaldButton());
+        CANCEL.getStyleClass().add("radioButtons");
+        CANCEL.setToggleGroup(GROUP);
+        CANCEL.setOnAction(e ->{
+            GRID.getChildren().clear();
+            try {
+                DesignAdd(GRID, TOP);
+            } catch (IOException ex) {
+                Logger.getLogger(DesignAdd.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        GRID.add(CONTINUE, 0, 0);
+        GRID.add(CANCEL, 0, 1);
         return GRID;
     }
     

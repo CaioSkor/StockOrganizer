@@ -6,6 +6,7 @@
 package controllers;
 
 import Scenes.DesignAdd;
+import WindowManagement.TopManagement;
 import java.io.IOException;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -22,6 +23,8 @@ public class NewInvestmentProcessor {
     
     private InvestmentController INVESTCONTROL;
     private DesignAdd DSADD;
+    private ToolsUse TOOLS;
+    private TopManagement TOPMANAGE;
     
     public String[] checkInputs(String PRICE, String AMOUNT, String DATE, String REASON) {
         WRONGINPUTS = new String[4];
@@ -68,6 +71,8 @@ public class NewInvestmentProcessor {
     public void createInvestment(String TICKER, String PRICE, String AMOUNT, String DATE, String REASON, String DELDATE, GridPane GRID, VBox TOP) throws IOException{
         INVESTCONTROL = new InvestmentController();
         DSADD = new DesignAdd();
+        TOOLS = new ToolsUse();
+        TOPMANAGE = new TopManagement();
         
         COUNT = 0;
         CHECK = 0;
@@ -115,6 +120,22 @@ public class NewInvestmentProcessor {
         }
         
         if(INDEX == 0){
+            if(TICKER.equals(TOOLS.TextBoxFiller("data/investment.txt", TICKER)[0])){
+                String OLDPRICE = TOOLS.TextBoxFiller("data/investment.txt", TICKER)[1];
+                String OLDAMOUNT = TOOLS.TextBoxFiller("data/investment.txt", TICKER)[2];
+                String OLDDATE = TOOLS.TextBoxFiller("data/investment.txt", TICKER)[3];
+                String OLDREASON = TOOLS.TextBoxFiller("data/investment.txt", TICKER)[4];
+                String OLDDELDATE = TOOLS.TextBoxFiller("data/investment.txt", TICKER)[5];
+                if(!TOOLS.TextBoxFiller("data/investment.txt", TICKER)[5].equals("000000")){
+                    GRID.getChildren().clear();
+                    TOPMANAGE.ChangeTop(TOP, " ");
+                    DSADD.DesignAddDeleted(GRID, TOP, TICKER, OLDPRICE, OLDAMOUNT, OLDDATE, OLDREASON, OLDDELDATE, PRICE, AMOUNT, DATE, REASON);
+                }else{
+                    GRID.getChildren().clear();
+                    TOPMANAGE.ChangeTop(TOP, " ");
+                    DSADD.DesignAddUpdate(GRID, TOP, TICKER, OLDPRICE, OLDAMOUNT, OLDDATE, OLDREASON, PRICE, AMOUNT, DATE, REASON);
+                }      
+            }
             INVESTCONTROL.createInvestment(TICKER, PRICE, AMOUNT, DATE, REASON, DELDATE);
         }else{
             DSADD.DesignAddWrongfulInputs(GRID, BLANK, TYPECHECK, COUNT, TOP);
