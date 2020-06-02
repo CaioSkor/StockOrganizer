@@ -19,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -30,18 +31,33 @@ public class DesignInv {
     private HBox[] MIDDLE;
     private VBox MID;
     private Integer INDEXA, INDEX, RESTE, PIECES;
+    private Button STARTBTN, DELETEDBTN;
+    private Text MESSAGE;
     
     private GetTicker TICKERS;
     private ToolsUse TOOLS;
     private MyFont MYFONT;
     private DesignStock DSSTOCK;
     private TopManagement TOPMANAGE;
+    private DesignAdd DSADD;
     
-    public GridPane DesignInv(GridPane GRID, VBox TOP, Stage MAINWINDOW) throws IOException{
+    public GridPane DesignInv(GridPane GRID, VBox TOP) throws IOException{
         TOOLS = new ToolsUse();
         TICKERS = new GetTicker();
         TOPMANAGE = new TopManagement();
         MYFONT = new MyFont();
+        
+        DELETEDBTN = new Button("Deleted and sold Investments");
+        DELETEDBTN.setFont(MYFONT.getOswaldButton());
+        DELETEDBTN.getStyleClass().add("submitButton");
+        DELETEDBTN.setOnAction(e ->{
+            try {
+                GRID.getChildren().clear();;
+                DesignInvDeleted(GRID, TOP);
+            } catch (IOException ex) {
+                Logger.getLogger(DesignInv.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         
         STOCKBTN = new Button[TOOLS.FileMeasure("data/investment.txt", 1)];
         
@@ -68,7 +84,7 @@ public class DesignInv {
                    int LASTBUTTON = BUTTONID;                
                    try {
                         DSSTOCK = new DesignStock();
-                        DSSTOCK.DesignStock(GRID,((Button) e.getSource()).getText());
+                        DSSTOCK.DesignStock(GRID,((Button) e.getSource()).getText(), TOP);
                     } catch (IOException ex) {
                         System.out.println("PROBLEMS");
                     } catch (ApiException ex) {
@@ -96,7 +112,96 @@ public class DesignInv {
                     int LASTBUTTON = BUTTONID;                
                     try {
                         DSSTOCK = new DesignStock();
-                        DSSTOCK.DesignStock(GRID,((Button) e.getSource()).getText());
+                        DSSTOCK.DesignStock(GRID,((Button) e.getSource()).getText(), TOP);
+                    } catch (IOException ex) {
+                        System.out.println("PROBLEMS");
+                    } catch (ApiException ex) {
+                        Logger.getLogger(DesignInv.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                });          
+                STOCKBTN[INDEX+(3*INDEXA)].getStyleClass().add("stockButtons");
+                STOCKBTN[INDEX+(3*INDEXA)].setFont(MYFONT.getOswaldButton());
+                MIDDLE[INDEXA].getChildren().add(STOCKBTN[INDEX+(3*INDEXA)]);     
+            }
+            MIDDLE[INDEXA].setPadding(new Insets(0,0,0,55));            
+        }
+        
+        MID = new VBox(10);
+        MID.setAlignment(Pos.CENTER);
+        for(INDEX=0; INDEX< PIECES; INDEX++){                     
+            MID.getChildren().add(MIDDLE[INDEX]); 
+        }
+        if (RESTE > 0){
+            MID.getChildren().add(MIDDLE[PIECES]);        
+        }    
+        
+        GRID.setPadding(new Insets(0, 50, 50, 75));
+        GRID.add(MID, 0, 0);
+        GRID.add(DELETEDBTN, 0, 6);
+        
+        return GRID;
+    }
+    
+    public GridPane DesignInvDeleted(GridPane GRID, VBox TOP) throws IOException{
+        TOOLS = new ToolsUse();
+        TICKERS = new GetTicker();
+        TOPMANAGE = new TopManagement();
+        MYFONT = new MyFont();
+        
+        STOCKBTN = new Button[TOOLS.FileMeasure("data/investment.txt", 0)];
+        
+        RESTE = TOOLS.FileMeasure("data/investment.txt", 0)%3;
+        PIECES = TOOLS.FileMeasure("data/investment.txt", 0)/3;
+        
+        if (RESTE > 0){
+            MIDDLE = new HBox[PIECES+1];
+        }else{
+            MIDDLE = new HBox[PIECES];        
+        }
+        for (INDEXA=0; INDEXA< PIECES; INDEXA++){    
+            MIDDLE[INDEXA] = new HBox(10);
+            for(INDEX=0; INDEX<3; INDEX++){         
+                STOCKBTN[INDEX+(3*INDEXA)] = new Button();
+                STOCKBTN[INDEX+(3*INDEXA)].setPrefWidth(110);
+                STOCKBTN[INDEX+(3*INDEXA)].setText(TICKERS.GetTicker("data/investment.txt",0)[INDEX+(3*INDEXA)]); 
+                STOCKBTN[INDEX+(3*INDEXA)].setOnAction((ActionEvent e) -> {
+                   GRID.getChildren().clear();
+                   String TITLE = "Investment: " + ((Button) e.getSource()).getText();
+                   TOPMANAGE.ChangeTop(TOP, TITLE);
+                   final Integer BUTTONID = INDEX;
+                   System.out.println("Button pressed " + ((Button) e.getSource()).getText());
+                   int LASTBUTTON = BUTTONID;                
+                   try {
+                        DSSTOCK = new DesignStock();
+                        DSSTOCK.DesignStock(GRID,((Button) e.getSource()).getText(), TOP);
+                    } catch (IOException ex) {
+                        System.out.println("PROBLEMS");
+                    } catch (ApiException ex) {
+                       Logger.getLogger(DesignInv.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                });   
+                STOCKBTN[INDEX+(3*INDEXA)].getStyleClass().add("stockButtons");
+                STOCKBTN[INDEX+(3*INDEXA)].setFont(MYFONT.getOswaldButton());
+                MIDDLE[INDEXA].getChildren().add(STOCKBTN[INDEX+(3*INDEXA)]);     
+            }
+            MIDDLE[INDEXA].setAlignment(Pos.CENTER);   
+        }
+        if (RESTE > 0){
+            MIDDLE[INDEXA] = new HBox(10);
+            for(INDEX=0; INDEX< RESTE; INDEX++){         
+                STOCKBTN[INDEX+(3*INDEXA)] = new Button();
+                STOCKBTN[INDEX+(3*INDEXA)].setPrefWidth(110);
+                STOCKBTN[INDEX+(3*INDEXA)].setText(TICKERS.GetTicker("data/investment.txt",0)[INDEX+(3*INDEXA)]); 
+                STOCKBTN[INDEX+(3*INDEXA)].setOnAction((ActionEvent e) -> {
+                    GRID.getChildren().clear();
+                    String TITLE = "Investment: " + ((Button) e.getSource()).getText();
+                    TOPMANAGE.ChangeTop(TOP, TITLE);
+                    final Integer BUTTONID = INDEX;
+                    System.out.println("Button pressed " + ((Button) e.getSource()).getText());
+                    int LASTBUTTON = BUTTONID;                
+                    try {
+                        DSSTOCK = new DesignStock();
+                        DSSTOCK.DesignStock(GRID,((Button) e.getSource()).getText(), TOP);
                     } catch (IOException ex) {
                         System.out.println("PROBLEMS");
                     } catch (ApiException ex) {
@@ -122,10 +227,67 @@ public class DesignInv {
         GRID.setPadding(new Insets(0, 50, 50, 75));
         GRID.add(MID, 0, 0);
         
+        return GRID;  
+    }
+    
+    public GridPane DesignInvStart(GridPane GRID, VBox TOP){
+        MYFONT = new MyFont();
+        TOPMANAGE = new TopManagement();
+        DSADD = new DesignAdd();
+        
+        MESSAGE = new Text("No investments recorded");
+        MESSAGE.setFont(MYFONT.getOswaldRegular());
+        
+        STARTBTN = new Button("Add Investment");
+        STARTBTN.setFont(MYFONT.getOswaldButton());
+        STARTBTN.getStyleClass().add("submitButton");
+        STARTBTN.setOnAction(e->{
+            TOPMANAGE.ChangeTop(TOP, "Add Investment");
+            try {
+                DSADD.DesignAdd(GRID, TOP);
+            } catch (IOException ex) {
+                Logger.getLogger(DesignInv.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        
+        GRID.setPadding(new Insets(0, 50, 50, 75));
+        
+        GRID.add(MESSAGE, 0, 0);
+        GRID.add(STARTBTN, 0, 1);
+        
         return GRID;
     }
     
-    public GridPane DesignInvDeleted(GridPane GRID, VBox TOP){
+    public GridPane DesignInvOnlyDeleted (GridPane GRID, VBox TOP){
+        MYFONT = new MyFont();
+        TOPMANAGE = new TopManagement();
+        DSADD = new DesignAdd();
+        
+        MESSAGE = new Text("No investments recorded");
+        MESSAGE.setFont(MYFONT.getOswaldRegular());
+        
+        DELETEDBTN = new Button("Deleted Investments");
+        DELETEDBTN.setFont(MYFONT.getOswaldButton());
+        DELETEDBTN.getStyleClass().add("submitButton");
+        
+        STARTBTN = new Button("Add Investment");
+        STARTBTN.setFont(MYFONT.getOswaldButton());
+        STARTBTN.getStyleClass().add("submitButton");
+        STARTBTN.setOnAction(e->{
+            TOPMANAGE.ChangeTop(TOP, "Add Investment");
+            try {
+                DSADD.DesignAdd(GRID, TOP);
+            } catch (IOException ex) {
+                Logger.getLogger(DesignInv.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        
+        GRID.setPadding(new Insets(0, 50, 50, 75));
+        
+        GRID.add(MESSAGE, 0, 0);
+        GRID.add(STARTBTN, 0, 1);
+        GRID.add(DELETEDBTN, 6, 6);
+        
         return GRID;
     }
     

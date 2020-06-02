@@ -5,7 +5,7 @@
  */
 package Scenes;
 
-import WindowManagement.DesignAddManagement;
+import WindowManagement.GridPaneManagement;
 import WindowManagement.TopManagement;
 import com.intrinio.invoker.ApiException;
 import controllers.InvestmentController;
@@ -46,7 +46,7 @@ public class DesignAdd {
     private InvestmentController INVESTCONTROL;
     private MyFont MYFONT;
     private ToolsUse TOOLS;
-    private DesignAddManagement MANAGE;
+    private GridPaneManagement MANAGE;
     private TopManagement TOPMANAGE;
     private Design DESIGN;
     private DesignStock DSSTOCK;
@@ -56,7 +56,7 @@ public class DesignAdd {
         DESIGN = new Design();
         INVESTCONTROL = new InvestmentController();
         MYFONT = new MyFont();
-        MANAGE = new DesignAddManagement();
+        MANAGE = new GridPaneManagement();
         PROCESSOR = new NewInvestmentProcessor();
         
         GRID.setVgap(30);
@@ -182,7 +182,7 @@ public class DesignAdd {
     
     public GridPane DesignAddCreatedInvestment (GridPane GRID, String TICKER, VBox TOP){
         MYFONT = new MyFont();
-        MANAGE = new DesignAddManagement();
+        MANAGE = new GridPaneManagement();
         TOPMANAGE = new TopManagement();
         DSSTOCK = new DesignStock();
         
@@ -204,7 +204,7 @@ public class DesignAdd {
             TOPMANAGE.ChangeTop(TOP, TEXT2);
             try {
                 try {
-                    DSSTOCK.DesignStock(GRID, TICKER);
+                    DSSTOCK.DesignStock(GRID, TICKER, TOP);
                 } catch (ApiException ex) {
                     Logger.getLogger(DesignAdd.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -311,8 +311,7 @@ public class DesignAdd {
                     GRID.add(MSG2, 0, 0);
                 }
             }
-        }
-        
+        }       
         GRID.add(BACKBTN, 0, 10);
         
         return GRID;
@@ -359,6 +358,7 @@ public class DesignAdd {
     public GridPane DesignAddUpdate(GridPane GRID, VBox TOP, String TICKER, String OLDPRICE,String  OLDAMOUNT,String OLDDATE,String OLDREASON,String NEWPRICE,String NEWAMOUNT,String NEWDATE,String NEWREASON) throws IOException{
         INVESTCONTROL = new InvestmentController();
         MYFONT = new MyFont();
+        TOPMANAGE = new TopManagement();
         
         GROUP = new ToggleGroup();
         
@@ -369,6 +369,7 @@ public class DesignAdd {
         CONTINUE.setOnAction(e ->{
             try {
                 GRID.getChildren().clear();
+                TOPMANAGE.ChangeTop(TOP, "Add Investment");
                 INVESTCONTROL.updateInvestment(TICKER, OLDPRICE, OLDAMOUNT, OLDDATE, OLDREASON, NEWPRICE, NEWAMOUNT, NEWDATE, NEWREASON, "000000");
                 DesignAddCreatedInvestment(GRID, TICKER, TOP);
             } catch (IOException ex) {
@@ -382,6 +383,7 @@ public class DesignAdd {
         CANCEL.setToggleGroup(GROUP);
         CANCEL.setOnAction(e ->{
             GRID.getChildren().clear();
+            TOPMANAGE.ChangeTop(TOP, "Add Investment");
             try {
                 DesignAdd(GRID, TOP);
             } catch (IOException ex) {

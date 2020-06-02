@@ -5,17 +5,26 @@
  */
 package Scenes;
 
+import WindowManagement.TopManagement;
 import com.intrinio.invoker.ApiException;
+import controllers.InvestmentController;
 import controllers.PerformanceController;
 import controllers.ToolsUse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.animation.PauseTransition;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  *
@@ -24,16 +33,21 @@ import javafx.stage.Stage;
 public class DesignStock {
     private Text CODETXT, PRICETXT, AMNTTXT, DATETXT, REATXT, CODE, PRICE, AMOUNT, DATE, REASON;
     private Text TOTALPERFTXT, PERCENTAGEPERFTXT, PERSTOCKPERFTXT, TOTALPERF, PERCENTAGEPERF, PERSTOCKPERF;
+    private Text MESSAGE;
     private Button DELETEBTN, SOLDBTN, GRAPHBTN;
     
     private MyFont MYFONT;
     private ToolsUse TOOLS;
     private PerformanceController PERFCONTROL;
+    private InvestmentController INVESTCONTROL;
+    private DesignInv DSINV;
+    private TopManagement TOPMANAGE;
     
-    public GridPane DesignStock(GridPane GRID, String TICKER) throws IOException, ApiException{
+    public GridPane DesignStock(GridPane GRID, String TICKER, VBox TOP) throws IOException, ApiException{
         MYFONT = new MyFont();
         TOOLS = new ToolsUse();
         PERFCONTROL = new PerformanceController();
+        INVESTCONTROL = new InvestmentController();
              
         CODETXT = new Text("Ticker");
         CODETXT.setFont(MYFONT.getOswaldRegular());
@@ -104,6 +118,24 @@ public class DesignStock {
         DELETEBTN = new Button("Delete");
         DELETEBTN.setFont(MYFONT.getOswaldButton());
         DELETEBTN.getStyleClass().add("submitButton");
+        DELETEBTN.setOnAction(e->{
+            try {
+                Date DATENOW = new Date();
+                SimpleDateFormat DF = new SimpleDateFormat("dd.MM");
+                String STRINGDATE = DF.format(DATENOW);
+                INVESTCONTROL.deleteInvestment(TICKER,
+                    TOOLS.TextBoxFiller("data/investment.txt", TICKER)[1],
+                    TOOLS.TextBoxFiller("data/investment.txt", TICKER)[2], 
+                    TOOLS.TextBoxFiller("data/investment.txt", TICKER)[3],
+                    TOOLS.TextBoxFiller("data/investment.txt", TICKER)[4],
+                    STRINGDATE
+                );
+            GRID.getChildren().clear();
+            onDeleteStock(GRID, TOP);
+            } catch (IOException ex) {
+                Logger.getLogger(DesignStock.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         
         SOLDBTN = new Button("Sold");
         SOLDBTN.setFont(MYFONT.getOswaldButton());
@@ -144,7 +176,32 @@ public class DesignStock {
         return GRID;
     }
     
-    public GridPane DesignDeletedStock(Stage MAINWINDOW, GridPane GRID, String TICKER){
+    public GridPane onDeleteStock(GridPane GRID, VBox TOP){
+        MYFONT = new MyFont();
+        DSINV  = new DesignInv();
+        TOPMANAGE = new TopManagement();
+        
+        MESSAGE = new Text("Your investment was sucessfully deleted");
+        MESSAGE.setFont(MYFONT.getOswaldRegular());
+        
+        GRID.add(MESSAGE, 0, 0);
+        
+        PauseTransition DELAY = new PauseTransition(Duration.seconds(2));
+        DELAY.setOnFinished(e->{
+            try {
+                GRID.getChildren().clear();
+                TOPMANAGE.ChangeTop(TOP, "Investments");
+                DSINV.DesignInv(GRID, TOP);
+            } catch (IOException ex) {
+                Logger.getLogger(DesignStock.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        DELAY.play();
+        
+        return GRID;
+    }
+    
+    public GridPane DesignDeletedStock(GridPane GRID, String TICKER){
         return GRID;
     }
 }

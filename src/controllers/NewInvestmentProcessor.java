@@ -135,8 +135,12 @@ public class NewInvestmentProcessor {
                     TOPMANAGE.ChangeTop(TOP, " ");
                     DSADD.DesignAddUpdate(GRID, TOP, TICKER, OLDPRICE, OLDAMOUNT, OLDDATE, OLDREASON, PRICE, AMOUNT, DATE, REASON);
                 }      
+            }else{
+                INVESTCONTROL.createInvestment(TICKER, PRICE, AMOUNT, DATE, REASON, DELDATE);
+                GRID.getChildren().clear();
+                TOPMANAGE.ChangeTop(TOP, " ");
+                DSADD.DesignAddCreatedInvestment(GRID, TICKER, TOP);
             }
-            INVESTCONTROL.createInvestment(TICKER, PRICE, AMOUNT, DATE, REASON, DELDATE);
         }else{
             DSADD.DesignAddWrongfulInputs(GRID, BLANK, TYPECHECK, COUNT, TOP);
         }

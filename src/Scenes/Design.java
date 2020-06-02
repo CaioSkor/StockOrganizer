@@ -5,6 +5,7 @@
  */
 package Scenes;
 
+import WindowManagement.GridPaneManagement;
 import WindowManagement.TopManagement;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -37,6 +38,7 @@ public class Design {
     private DesignAdd DSADD;
     private TopManagement TOPMANAGE;
     private DesignInv DSINV;
+    private GridPaneManagement MANAGE;
     
     public Design(){
     }
@@ -46,6 +48,7 @@ public class Design {
         DSADD = new DesignAdd();
         TOPMANAGE = new TopManagement();
         DSINV = new DesignInv();
+        MANAGE = new GridPaneManagement();
         
         SUBMAIN = new GridPane();
         
@@ -90,6 +93,10 @@ public class Design {
         PERFBTN.getStyleClass().add("navBarButtons");
         PERFBTN.setMinHeight(100);
         PERFBTN.setFont(MYFONT.getOswaldNavBarButton());
+        PERFBTN.setOnAction(e->{
+            SUBMAIN.getChildren().clear();
+            TOPMANAGE.ChangeTop(TOP, "Portfolio Performance");
+        });
         
         INVESTBTN = new Button();
         INVESTBTN.setMinWidth(300);
@@ -101,7 +108,7 @@ public class Design {
             SUBMAIN.getChildren().clear();
             TOPMANAGE.ChangeTop(TOP, "Investments");
             try {
-                DSINV.DesignInv(SUBMAIN, TOP, MAINWINDOW);
+                MANAGE.DesignInv(SUBMAIN, TOP);
             } catch (IOException ex) {
                 Logger.getLogger(Design.class.getName()).log(Level.SEVERE, null, ex);
             }
