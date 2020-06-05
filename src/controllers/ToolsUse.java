@@ -47,32 +47,6 @@ public class ToolsUse {
         return POS;
     }
     
-    public void BoxFiller(String FILEME, ComboBox SELECTOR,String SOFAR, Integer CHOICE) throws IOException{
-        POS = FileMeasure(FILEME,CHOICE);
-        SORT = new String[POS];
-        REFERENCE = new File (FILEME);
-        INDEX = 0;
-        Scanner READER = new Scanner (REFERENCE);
-        while (READER.hasNextLine()) {
-            MINILINE = READER.nextLine();
-            STRING = MINILINE.split(",");
-            if(CHOICE == 1){
-                if(STRING[5].equals("000000")){
-                    SORT[INDEX] = STRING[0];
-                    INDEX = INDEX +1;
-                }
-            }else{
-                if(!STRING[5].equals("000000")){
-                    SORT[INDEX] = STRING[0];
-                    INDEX = INDEX +1;
-                }
-            }  
-        }
-        Arrays.sort(SORT);
-        for (INDEX=0; INDEX< POS; INDEX++){ 
-            SELECTOR.getItems().add(SORT[INDEX]); 
-        }
-    }
     
     public String[] TextBoxFiller(String FILEME, String INVESTNAME) throws IOException{
         STRING = new String[5];

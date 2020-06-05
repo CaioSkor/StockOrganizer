@@ -7,6 +7,7 @@ package Scenes;
 
 import WindowManagement.GridPaneManagement;
 import WindowManagement.TopManagement;
+import com.intrinio.invoker.ApiException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -95,6 +96,13 @@ public class Design {
         PERFBTN.setFont(MYFONT.getOswaldNavBarButton());
         PERFBTN.setOnAction(e->{
             SUBMAIN.getChildren().clear();
+            try {
+                MANAGE.DesignPerf(SUBMAIN, TOP);
+            } catch (IOException ex) {
+                Logger.getLogger(Design.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ApiException ex) {
+                Logger.getLogger(Design.class.getName()).log(Level.SEVERE, null, ex);
+            }
             TOPMANAGE.ChangeTop(TOP, "Portfolio Performance");
         });
         

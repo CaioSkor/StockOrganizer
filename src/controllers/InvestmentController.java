@@ -332,13 +332,7 @@ public class InvestmentController {
         
         return TICKERS;
     }
-    
-    public String getLastInvestment(){
-        String LASTCODE;
-        LASTCODE = INVESTIMENTS.get(INVESTIMENTS.size()-1).getCode();
-        return LASTCODE;
-    }
-    
+        
     public LinkedList<String> readNyseTickers() throws FileNotFoundException, IOException {
         LinkedList<String> TICKERS = new LinkedList<String>();
         FileReader TEXTFILEPATH = new FileReader("data/nyse-listed.txt");
@@ -362,13 +356,7 @@ public class InvestmentController {
         return TICKERS;
     }
     
-    public LinkedList getLinkedListINVESTIMENTS() {
-        return INVESTIMENTS;
-    }
     
-    public LinkedList getLinkedListLASTPERFORMANCE(){
-        return LASTPERFORMANCE;
-    }
     
     public String[][] getAllCodes(){
         allInfo();

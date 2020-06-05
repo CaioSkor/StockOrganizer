@@ -8,9 +8,11 @@ package WindowManagement;
 import Scenes.DesignAdd;
 import Scenes.DesignInv;
 import Scenes.DesignPerf;
+import com.intrinio.invoker.ApiException;
 import controllers.InvestmentController;
 import controllers.ToolsUse;
 import java.io.IOException;
+import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -40,17 +42,20 @@ public class GridPaneManagement {
     public void DesignInv(GridPane GRID, VBox TOP) throws IOException{
         DSINV = new DesignInv();
         INVESTCONTROL = new InvestmentController();
+        TOOLS = new ToolsUse();
         
         if(!INVESTCONTROL.getAllCodes()[0][0].equals("NULL")){
             DSINV.DesignInv(GRID, TOP);
-        }else if (!INVESTCONTROL.getToutLastPerf()[0].equals("NULL")){
+        }else if (!INVESTCONTROL.getToutLastPerf()[0].equals("NULL") || TOOLS.FileMeasure("data/investment.txt", 1) > 0){
             DSINV.DesignInvOnlyDeleted(GRID, TOP);
         }else{
             DSINV.DesignInvStart(GRID, TOP);
         }
     }
     
-    public void DesignPerf(GridPane GRID, VBox TOP) throws IOException{
+    public void DesignPerf(GridPane GRID, VBox TOP) throws IOException, ApiException{
+        GRID.setVgap(30);
+        GRID.setHgap(40);
         DSPERF = new DesignPerf();
         INVESTCONTROL = new InvestmentController();
         
