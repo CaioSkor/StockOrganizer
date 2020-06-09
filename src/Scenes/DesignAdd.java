@@ -237,6 +237,7 @@ public class DesignAdd {
     
     public GridPane DesignAddWrongfulInputs (GridPane GRID, String[] BLANK, boolean[] CORRECT, Integer INDEX, VBox TOP){
         MYFONT = new MyFont();
+        MANAGE = new GridPaneManagement();
         
         BACKBTN = new Button("Back");
         BACKBTN.setFont(MYFONT.getOswaldButton());
@@ -244,7 +245,7 @@ public class DesignAdd {
         BACKBTN.setOnAction(e ->{
             GRID.getChildren().clear();
             try {
-                DesignAdd(GRID, TOP);
+                MANAGE.DesignAddDefault(GRID, TOP);
             } catch (IOException ex) {
                 Logger.getLogger(DesignAdd.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -259,6 +260,7 @@ public class DesignAdd {
         
         Text MSG3 = new Text("Please don't leave" + Arrays.toString(BLANK).replace("[", " ").replace("]", " ") + "blank");
         MSG3.setFont(MYFONT.getOswaldRegular());
+        System.out.println(BLANK[1]);
                 
         System.out.println(BLANK[0]);
         

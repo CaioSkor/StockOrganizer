@@ -177,6 +177,7 @@ public class DesignInv {
                    System.out.println("Button pressed " + ((Button) e.getSource()).getText());
                    int LASTBUTTON = BUTTONID;                
                    try {
+                       System.out.println("aaa");
                         DSSTOCK = new DesignStock();
                         DSSTOCK.DesignDeletedStock(GRID,((Button) e.getSource()).getText(), TOP);
                     } catch (IOException ex) {
@@ -203,6 +204,7 @@ public class DesignInv {
                     System.out.println("Button pressed " + ((Button) e.getSource()).getText());
                     int LASTBUTTON = BUTTONID;                
                     try {
+                        System.out.println("aaa");
                         DSSTOCK = new DesignStock();
                         DSSTOCK.DesignDeletedStock(GRID,((Button) e.getSource()).getText(), TOP);
                     } catch (IOException ex) {

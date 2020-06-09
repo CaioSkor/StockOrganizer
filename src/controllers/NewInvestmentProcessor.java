@@ -50,7 +50,7 @@ public class NewInvestmentProcessor {
             Integer.parseInt(AMOUNT);
             WRONGINPUTS[1] = null;
         }catch(Exception e){
-            if(INPUTS[0] != null && !INPUTS[0].trim().isEmpty()){
+            if(INPUTS[1] != null && !INPUTS[1].trim().isEmpty()){
                 WRONGINPUTS[1] = "1";
             }else{
                 WRONGINPUTS[1] = "0";
@@ -64,6 +64,7 @@ public class NewInvestmentProcessor {
                 WRONGINPUTS[i] = "0";
             }
         }
+        System.out.println(WRONGINPUTS[1]);
         
         return WRONGINPUTS;
     }
@@ -106,8 +107,8 @@ public class NewInvestmentProcessor {
         for(int i=0; i < INPUTCHECK.length; i++){
             if(INPUTCHECK[i]){
                BLANK[POS] = INPUT[i];
-                System.out.println(INPUT[i]);
-                System.out.println(BLANK[POS]);
+         //       System.out.println(INPUT[i]);
+           //     System.out.println(BLANK[POS]);
                POS++;
             }
         }

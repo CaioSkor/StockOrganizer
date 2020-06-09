@@ -163,6 +163,9 @@ public class DesignPerf {
     }
     
     public GridPane DesignPerfOnlySold(GridPane GRID, VBox TOP) throws IOException, ApiException{
+        MYFONT = new MyFont();
+        PERF = new PerformanceController();
+        
         ADDTXT = new Text("+");
         ADDTXT.setFont(MYFONT.getOswaldRegular());
         ADDTXT.setFill(Color.CHARTREUSE);
@@ -182,6 +185,8 @@ public class DesignPerf {
         
         PROFITPERCENTAGE = new Text(TOTALPROFITPERCENTAGE + " ");
         PROFITPERCENTAGE.setFont(MYFONT.getOswaldRegular());
+        
+        PROFITFLOW = new TextFlow();
         
         if(PERF.getTotalProfit() > 0){
             PROFITFLOW.getChildren().addAll(ADDTXT,PROFIT,PROFITPERCENTAGE,PERCENTAGETXT);

@@ -34,7 +34,7 @@ import javafx.util.Duration;
  */
 public class DesignStock {
     private Text CODETXT, PRICETXT, AMNTTXT, DATETXT, REATXT, CODE, PRICE, AMOUNT, DATE, REASON;
-    private Text TOTALPERFTXT, PERCENTAGEPERFTXT, PERSTOCKPERFTXT, TOTALPERF, PERCENTAGEPERF, PERSTOCKPERF;
+    private Text TOTALPERFTXT, PERCENTAGEPERFTXT, PERSTOCKPERFTXT, TOTALPERF, PERCENTAGEPERF, PERSTOCKPERF, DELDATETXT, DELDATE;
     private Text MESSAGE;
     private TextField SELLPRICE;
     private Button DELETEBTN, SOLDBTN, GRAPHBTN, SUBBTN;
@@ -46,6 +46,7 @@ public class DesignStock {
     private DesignInv DSINV;
     private TopManagement TOPMANAGE;
     private GridPaneManagement MANAGE;
+    private DesignGraph DSGRAPH;
     
     public GridPane DesignStock(GridPane GRID, String TICKER, VBox TOP) throws IOException, ApiException{
         MYFONT = new MyFont();
@@ -53,6 +54,8 @@ public class DesignStock {
         PERFCONTROL = new PerformanceController();
         INVESTCONTROL = new InvestmentController();
         MANAGE = new GridPaneManagement();
+        DSGRAPH = new DesignGraph();
+        TOPMANAGE = new TopManagement();
              
         CODETXT = new Text("Ticker");
         CODETXT.setFont(MYFONT.getOswaldRegular());
@@ -157,6 +160,17 @@ public class DesignStock {
         GRAPHBTN = new Button("Graph");
         GRAPHBTN.setFont(MYFONT.getOswaldButton());
         GRAPHBTN.getStyleClass().add("submitButton");
+        GRAPHBTN.setOnAction(e->{
+            try {
+                GRID.getChildren().clear();
+                TOPMANAGE.ChangeTop(TOP, "Graph: " + TICKER);
+                DSGRAPH.DesignGraph(GRID, TOP, TICKER, true);
+            } catch (IOException ex) {
+                Logger.getLogger(DesignStock.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ApiException ex) {
+                Logger.getLogger(DesignStock.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         
         GRID.add(CODETXT, 0, 0);
         GRID.add(PRICETXT, 0, 1);
@@ -220,6 +234,8 @@ public class DesignStock {
         TOOLS = new ToolsUse();
         PERFCONTROL = new PerformanceController();
         INVESTCONTROL = new InvestmentController();
+        TOPMANAGE = new TopManagement();
+        DSGRAPH = new DesignGraph();
              
         CODETXT = new Text("Ticker");
         CODETXT.setFont(MYFONT.getOswaldRegular());
@@ -254,24 +270,53 @@ public class DesignStock {
         
         REASON = new Text(TOOLS.TextBoxFiller("data/investment.txt", TICKER)[4]);
         REASON.setFont(MYFONT.getOswaldRegular());
-        DATE.setTextAlignment(TextAlignment.RIGHT);
-                
-        TOTALPERFTXT = new Text("Total Performance");
-        TOTALPERFTXT.setFont(MYFONT.getOswaldRegular());
+        REASON.setTextAlignment(TextAlignment.RIGHT);
+            
+        if(TOOLS.CheckSoldInvestments(TOOLS.TextBoxFiller("data/investment.txt",TICKER)[0]) == 1){
+            TOTALPERFTXT = new Text("Last Performance");
+            TOTALPERFTXT.setFont(MYFONT.getOswaldRegular());
+                        
+            TOTALPERF = new Text(TOOLS.getLastPerf(TICKER));
+            TOTALPERF.setFont(MYFONT.getOswaldRegular());
+            TOTALPERF.setTextAlignment(TextAlignment.RIGHT);
+            
+            if(Double.parseDouble(TOOLS.getLastPerf(TICKER))<0){
+                TOTALPERF.setFill(MYFONT.getTitleColor());
+            }else{
+                TOTALPERF.setFill(Color.CHARTREUSE);
+            }
+            
+            GRID.add(TOTALPERFTXT, 0, 7);
         
-        TOTALPERF = new Text(TOOLS.getLastPerf(TICKER));
-        TOTALPERF.setFont(MYFONT.getOswaldRegular());
-        TOTALPERF.setTextAlignment(TextAlignment.RIGHT);
-        
-        if(Double.parseDouble(TOOLS.getLastPerf(TICKER))<0){
-            TOTALPERF.setFill(MYFONT.getTitleColor());
+            GRID.add(TOTALPERF, 2, 7);
         }else{
-            TOTALPERF.setFill(Color.CHARTREUSE);
+            DELDATETXT = new Text("Date of deletion");
+            DELDATETXT.setFont(MYFONT.getOswaldRegular());
+            
+            DELDATE = new Text(TOOLS.TextBoxFiller("data/investment.txt", TICKER)[5]);
+            DELDATE.setFont(MYFONT.getOswaldRegular());
+            DELDATE.setFill(MYFONT.getTitleColor());
+            
+            GRID.add(DELDATETXT, 0, 7);
+        
+            GRID.add(DELDATE, 2, 7);
+            
         }
         
         GRAPHBTN = new Button("Graph");
         GRAPHBTN.setFont(MYFONT.getOswaldButton());
         GRAPHBTN.getStyleClass().add("submitButton");
+        GRAPHBTN.setOnAction(e->{
+            try {
+                GRID.getChildren().clear();
+                TOPMANAGE.ChangeTop(TOP, "Graph: " + TICKER);
+                DSGRAPH.DesignGraph(GRID, TOP, TICKER, false);
+            } catch (IOException ex) {
+                Logger.getLogger(DesignStock.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ApiException ex) {
+                Logger.getLogger(DesignStock.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         
         GRID.add(CODETXT, 0, 0);
         GRID.add(PRICETXT, 0, 1);
@@ -283,10 +328,6 @@ public class DesignStock {
         GRID.add(AMOUNT, 2, 2);
         GRID.add(DATE, 2, 3);
         GRID.add(REASON, 2, 4);
-        
-        GRID.add(TOTALPERFTXT, 0, 7);
-        
-        GRID.add(TOTALPERF, 2, 7);
         
         GRID.add(GRAPHBTN, 3, 0);
         
