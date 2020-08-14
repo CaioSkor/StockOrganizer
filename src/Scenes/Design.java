@@ -15,6 +15,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -32,14 +33,16 @@ public class Design {
     private HBox SECTIONS;
     private GridPane SUBMAIN;
     private BorderPane LAYOUT;
-    private Button HOMEBTN, ADDBTN, PERFBTN, INVESTBTN;
-    private Text TITLE;
+    private Button HOMEBTN, ADDBTN, PERFBTN, INVESTBTN,TEXT1,TEXT2,TEXT3,TEXT4,TEXT5;;
+    private Text TITLE, WELCOMETXT, WELCOMETXT2;
+    
     
     private MyFont MYFONT;
     private DesignAdd DSADD;
     private TopManagement TOPMANAGE;
     private DesignInv DSINV;
     private GridPaneManagement MANAGE;
+    private DesignHome DSHOME;
     
     public Design(){
     }
@@ -50,10 +53,17 @@ public class Design {
         TOPMANAGE = new TopManagement();
         DSINV = new DesignInv();
         MANAGE = new GridPaneManagement();
+        DSHOME = new DesignHome();
         
         SUBMAIN = new GridPane();
+        SUBMAIN.setHgap(50);
+        SUBMAIN.setVgap(30);
+        SUBMAIN.setAlignment(Pos.CENTER);
+        
         
         TOP = new VBox();
+        
+        DSHOME.DesignHome(SUBMAIN, TOP);
         
         TITLE = new Text();
         TITLE.setText("Stock Organizer Software");
@@ -69,6 +79,7 @@ public class Design {
         HOMEBTN.setFont(MYFONT.getOswaldNavBarButton());
         HOMEBTN.setOnAction(e ->{
             SUBMAIN.getChildren().clear();
+            DSHOME.DesignHome(SUBMAIN, TOP);
             TOPMANAGE.ChangeTop(TOP, "Stock Organizer Software");
         });
         
@@ -95,6 +106,7 @@ public class Design {
         PERFBTN.setMinHeight(100);
         PERFBTN.setFont(MYFONT.getOswaldNavBarButton());
         PERFBTN.setOnAction(e->{
+            TOPMANAGE.ChangeTop(TOP, "Portfolio Performance");
             SUBMAIN.getChildren().clear();
             try {
                 MANAGE.DesignPerf(SUBMAIN, TOP);
@@ -103,7 +115,6 @@ public class Design {
             } catch (ApiException ex) {
                 Logger.getLogger(Design.class.getName()).log(Level.SEVERE, null, ex);
             }
-            TOPMANAGE.ChangeTop(TOP, "Portfolio Performance");
         });
         
         INVESTBTN = new Button();
@@ -154,6 +165,8 @@ public class Design {
     public Scene getScreen(){
         return SCENE;
     }
+
+   
 
 }
  

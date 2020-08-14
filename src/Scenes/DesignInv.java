@@ -14,11 +14,15 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -28,12 +32,13 @@ import javafx.stage.Stage;
  * @author caio
  */
 public class DesignInv {
-    private Button[] STOCKBTN;
+    private Button[] STOCKBTN,INFOBTN;
     private HBox[] MIDDLE;
     private VBox MID;
     private Integer INDEXA, INDEX, RESTE, PIECES;
     private Button STARTBTN, DELETEDBTN;
     private Text MESSAGE;
+    private GridPane INFO;
     
     private GetTicker TICKERS;
     private ToolsUse TOOLS;
@@ -49,6 +54,8 @@ public class DesignInv {
         TOPMANAGE = new TopManagement();
         MYFONT = new MyFont();
         
+        INFO = new GridPane();
+        
         DELETEDBTN = new Button("Deleted and sold Investments");
         DELETEDBTN.setFont(MYFONT.getOswaldButton());
         DELETEDBTN.getStyleClass().add("submitButton");
@@ -63,6 +70,7 @@ public class DesignInv {
         });
         
         STOCKBTN = new Button[TOOLS.FileMeasure("data/investment.txt", 1)];
+        INFOBTN = new Button[TOOLS.FileMeasure("data/investment.txt", 1)];
         
         RESTE = TOOLS.FileMeasure("data/investment.txt", 1)%3;
         PIECES = TOOLS.FileMeasure("data/investment.txt", 1)/3;
@@ -74,7 +82,9 @@ public class DesignInv {
         }
         for (INDEXA=0; INDEXA< PIECES; INDEXA++){    
             MIDDLE[INDEXA] = new HBox(10);
-            for(INDEX=0; INDEX<3; INDEX++){         
+            for(INDEX=0; INDEX<3; INDEX++){     
+                INFOBTN[INDEX+(3*INDEXA)] = new Button();
+                INFOBTN[INDEX+(3*INDEXA)].setText("hello");
                 STOCKBTN[INDEX+(3*INDEXA)] = new Button();
                 STOCKBTN[INDEX+(3*INDEXA)].setPrefWidth(110);
                 STOCKBTN[INDEX+(3*INDEXA)].setText(TICKERS.GetTicker("data/investment.txt",1)[INDEX+(3*INDEXA)]); 
@@ -96,13 +106,16 @@ public class DesignInv {
                 });   
                 STOCKBTN[INDEX+(3*INDEXA)].getStyleClass().add("stockButtons");
                 STOCKBTN[INDEX+(3*INDEXA)].setFont(MYFONT.getOswaldButton());
+                
                 MIDDLE[INDEXA].getChildren().add(STOCKBTN[INDEX+(3*INDEXA)]);     
             }
             MIDDLE[INDEXA].setAlignment(Pos.CENTER);   
         }
         if (RESTE > 0){
             MIDDLE[INDEXA] = new HBox(10);
-            for(INDEX=0; INDEX< RESTE; INDEX++){         
+            for(INDEX=0; INDEX< RESTE; INDEX++){  
+                INFOBTN[INDEX+(3*INDEXA)] = new Button();
+                INFOBTN[INDEX+(3*INDEXA)].setText("HELLO");
                 STOCKBTN[INDEX+(3*INDEXA)] = new Button();
                 STOCKBTN[INDEX+(3*INDEXA)].setPrefWidth(110);
                 STOCKBTN[INDEX+(3*INDEXA)].setText(TICKERS.GetTicker("data/investment.txt",1)[INDEX+(3*INDEXA)]); 
@@ -121,7 +134,8 @@ public class DesignInv {
                     } catch (ApiException ex) {
                         Logger.getLogger(DesignInv.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                });          
+                });  
+                
                 STOCKBTN[INDEX+(3*INDEXA)].getStyleClass().add("stockButtons");
                 STOCKBTN[INDEX+(3*INDEXA)].setFont(MYFONT.getOswaldButton());
                 MIDDLE[INDEXA].getChildren().add(STOCKBTN[INDEX+(3*INDEXA)]);     
@@ -141,8 +155,11 @@ public class DesignInv {
         GRID.setVgap(30);
         GRID.setHgap(40);
         GRID.setPadding(new Insets(0, 50, 50, 75));
-        GRID.add(MID, 0, 0);
+        GRID.add(INFO, 0, 0);
+        GRID.add(MID, 0, 1);
         GRID.add(DELETEDBTN, 0,10);
+        
+        
         
         return GRID;
     }

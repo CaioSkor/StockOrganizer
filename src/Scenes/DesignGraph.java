@@ -41,7 +41,7 @@ public class DesignGraph {
     HBox BOTTOM, MID;
     GridPane MIDCHOICE, MIDGRAPH, TOP;
     Button BACKBTN;
-    ComboBox FREQUENCY;
+    ComboBox FREQUENCY,TIMEFRAME;
     CategoryAxis XAXIS;
     NumberAxis YAXIS;
     LineChart<String, Number> LINECHART;
@@ -78,7 +78,6 @@ public class DesignGraph {
         CHOICE.setFill(Color.GRAY);
         
    //     MIDGRAPH.add(CHOICE, 0, 0);
-        
         
         ObservableList<String> OPTIONS = FXCollections.observableArrayList("daily", "weekly", "monthly", "quarterly", "yearly");
         FREQUENCY = new ComboBox();

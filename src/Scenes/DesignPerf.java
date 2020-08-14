@@ -15,12 +15,16 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.PauseTransition;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 
@@ -29,9 +33,9 @@ import javafx.util.Duration;
  * @author caio
  */
 public class DesignPerf {
-    private Text STARTPORT, GAINSTOCKSTXT, GAINOVERRALTXT, PROFITTXT, GAINSTOCKS, GAINSTOCKSPERCENTAGE, GAINOVERRAL, GAINOVERRALPERCENTAGE, PROFIT, PROFITPERCENTAGE, ADDTXT, SUBTRACTTXT, PERCENTAGETXT;
+    private Text STARTPORT, GAINSTOCKSTXT, GAINOVERRALTXT, PROFITTXT, GAINSTOCKS, GAINSTOCKSPERCENTAGE, GAINOVERRAL, GAINOVERRALPERCENTAGE, PROFIT, PROFITPERCENTAGE, ADDTXT, SUBTRACTTXT, PERCENTAGETXT, REALGAIN;
     private Button RESETBTN, RESETCONFIRMBTN, STARTBTN, CANCELBTN;
-    private TextFlow GAINSTOCKSFLOW, GAINOVERRALFLOW, PROFITFLOW;
+    private HBox SHARESBOX, PROFITBOX, OVERRALBOX;
     
     
     private ToolsUse TOOLS;
@@ -43,96 +47,126 @@ public class DesignPerf {
     private MyFont MYFONT;
     
     public GridPane DesignPerf(GridPane GRID, VBox TOP) throws IOException, ApiException{
-        System.out.println("ola");
+        GRID.setHgap(5);
         MYFONT = new MyFont();
+        DSADD = new DesignAdd();
+        TOPMANAGE = new TopManagement();
+        PROFITBOX = new HBox(50);
+        SHARESBOX = new HBox(50);
+        OVERRALBOX = new HBox(50);
         PERF = new PerformanceController();
         
-        ADDTXT = new Text("+");
-        ADDTXT.setFont(MYFONT.getOswaldRegular());
-        ADDTXT.setFill(Color.CHARTREUSE);
-        
-        SUBTRACTTXT = new Text("-");
-        SUBTRACTTXT.setFont(MYFONT.getOswaldRegular());
-        SUBTRACTTXT.setFill(MYFONT.getTitleColor());
-        
-        PERCENTAGETXT = new Text("%");
-        PERCENTAGETXT.setFont(MYFONT.getOswaldRegular());
-        
-        GAINSTOCKSTXT = new Text("Current stocks balance");
-        GAINSTOCKSTXT.setFont(MYFONT.getOswaldRegular());
-        
-        GAINOVERRALTXT = new Text("Current and sold stocks balance");
+        GAINOVERRALTXT = new Text();
+        GAINOVERRALTXT.setText("Balance current and sold stocks:");
         GAINOVERRALTXT.setFont(MYFONT.getOswaldRegular());
+        GAINOVERRALTXT.setFill(Color.GRAY);
         
-        PROFITTXT = new Text("Gain/Loss from sold stocks");
-        PROFITTXT.setFont(MYFONT.getOswaldRegular());
-        
-        String GAINSHARES = String.valueOf(PERF.getTotalPerformanceShare());
-        String GAINSHARESPERCENTAGE = String.valueOf(PERF.getTotalPerformancePerc()); // Fix this
-        String GAINTOTAL = String.valueOf(PERF.getTotalPerformanceAll());
-        String GAINTOTALPERCENTAGE  = String.valueOf(PERF.getTotalPerformancePerc());
-        String TOTALPROFIT = String.valueOf(PERF.getTotalProfit());
-        String TOTALPROFITPERCENTAGE = String.valueOf(PERF.getTotalGainPercentage());
-        
-        GAINSTOCKS = new Text(GAINSHARES + " ");
+        GAINSTOCKS = new Text();
         GAINSTOCKS.setFont(MYFONT.getOswaldRegular());
-        
-        GAINSTOCKSPERCENTAGE = new Text(GAINSHARESPERCENTAGE + " ");
+
+        GAINSTOCKSPERCENTAGE = new Text();
         GAINSTOCKSPERCENTAGE.setFont(MYFONT.getOswaldRegular());
         
-        GAINOVERRAL = new Text(GAINTOTAL + " ");
+        GAINOVERRAL = new Text();
         GAINOVERRAL.setFont(MYFONT.getOswaldRegular());
-        
-        GAINOVERRALPERCENTAGE = new Text(GAINTOTALPERCENTAGE + " ");
+
+        GAINOVERRALPERCENTAGE = new Text();
         GAINOVERRALPERCENTAGE.setFont(MYFONT.getOswaldRegular());
         
-        PROFIT = new Text(TOTALPROFIT + " ");
-        PROFIT.setFont(MYFONT.getOswaldRegular());
-        
-        PROFITPERCENTAGE = new Text(TOTALPROFITPERCENTAGE + " ");
-        PROFITPERCENTAGE.setFont(MYFONT.getOswaldRegular());
-        
-        GAINSTOCKSFLOW = new TextFlow();
-        GAINOVERRALFLOW = new TextFlow();
-        PROFITFLOW = new TextFlow();
-        
-        if(PERF.getTotalPerformanceShare()>0){
-            GAINSTOCKSFLOW.getChildren().addAll(ADDTXT,GAINSTOCKS,GAINSTOCKSPERCENTAGE,PERCENTAGETXT);
+        if(PERF.getTotalPerformanceShare() > 0){
+                    String MESSAGE1 = String.valueOf(PERF.getTotalPerformanceShare());
+                    GAINSTOCKS.setText("+ "+MESSAGE1 + " USD   ");
+                    GAINSTOCKS.setFill(Color.CHARTREUSE);
+                    String MESSAGE2 = String.valueOf(PERF.getTotalPerformancePerc());
+                    GAINSTOCKSPERCENTAGE.setText("+ "+MESSAGE2 + " %   ");
+                    GAINSTOCKSPERCENTAGE.setFill(Color.CHARTREUSE);
         }else{
-            GAINSTOCKSFLOW.getChildren().addAll(SUBTRACTTXT,GAINSTOCKS,GAINSTOCKSPERCENTAGE,PERCENTAGETXT);
+                    String MESSAGE1 = String.valueOf(PERF.getTotalPerformanceShare());
+                    GAINSTOCKS.setText(MESSAGE1 + " USD   ");
+                    GAINSTOCKS.setFill(MYFONT.getTitleColor());
+                    String MESSAGE2 = String.valueOf(PERF.getTotalPerformancePerc());
+                    GAINSTOCKSPERCENTAGE.setText(MESSAGE2 + " %   ");
+                    GAINSTOCKSPERCENTAGE.setFill(MYFONT.getTitleColor());
         }
         
         if(PERF.getTotalPerformanceAll() > 0){
-            GAINOVERRALFLOW.getChildren().addAll(ADDTXT,GAINOVERRAL,GAINOVERRALPERCENTAGE,PERCENTAGETXT);
+            String MESSAGE3 = String.valueOf(PERF.getTotalPerformanceAll());
+            GAINOVERRAL.setText("+ "+MESSAGE3 + " USD   ");
+            GAINOVERRAL.setFill(Color.CHARTREUSE);
+            String MESSAGE4 = String.valueOf(PERF.getTotalGainPercentage());
+            GAINOVERRALPERCENTAGE.setText("+ "+MESSAGE4 + " %   ");
+            GAINOVERRALPERCENTAGE.setFill(Color.CHARTREUSE);  
         }else{
-            GAINOVERRALFLOW.getChildren().addAll(SUBTRACTTXT,GAINOVERRAL,GAINOVERRALPERCENTAGE,PERCENTAGETXT);
+            String MESSAGE3 = String.valueOf(PERF.getTotalPerformanceAll());
+            GAINOVERRAL.setText(MESSAGE3 + " USD   ");
+            GAINOVERRAL.setFill(MYFONT.getTitleColor());
+            String MESSAGE4 = String.valueOf(PERF.getTotalGainPercentage());
+            GAINOVERRALPERCENTAGE.setText(MESSAGE4 + " %   ");
+            GAINOVERRALPERCENTAGE.setFill(MYFONT.getTitleColor()); 
         }
-        
-        if(PERF.getTotalProfit() > 0){
-            PROFITFLOW.getChildren().addAll(ADDTXT,PROFIT,PROFITPERCENTAGE,PERCENTAGETXT);
-        }else{
-            PROFITFLOW.getChildren().addAll(SUBTRACTTXT,PROFIT,PROFITPERCENTAGE,PERCENTAGETXT);
-        }
-        
-        RESETBTN = new Button("Reset Portfolio");
+       
+        RESETBTN = new Button();
+        RESETBTN.setText("RESET ALL PORTFOLIO");
         RESETBTN.setFont(MYFONT.getOswaldButton());
         RESETBTN.getStyleClass().add("submitButton");
-        RESETBTN.setOnAction(e->{
+        RESETBTN.setOnAction((ActionEvent e) -> {
+            GRID.getChildren().clear();
             try {
-                GRID.getChildren().clear();
-                DesignPerfConfirmReset(GRID, TOP);
+                DesignPerfConfirmReset(GRID,TOP);
             } catch (IOException ex) {
                 Logger.getLogger(DesignPerf.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
         
-       GRID.add(GAINSTOCKSFLOW, 0, 0);
-       GRID.add(GAINOVERRALFLOW, 0, 1);
-       GRID.add(PROFITFLOW, 0, 2);
-       
-       GRID.add(RESETBTN, 3, 7);
+        GAINSTOCKSTXT = new Text("Stocks performance:");
+        GAINSTOCKSTXT.setTextAlignment(TextAlignment.CENTER);
+        GAINSTOCKSTXT.setFont(MYFONT.getOswaldRegular());
         
-       return GRID; 
+        GAINOVERRALTXT = new Text("Total balance:");
+        GAINOVERRALTXT.setTextAlignment(TextAlignment.CENTER);
+        GAINOVERRALTXT.setFont(MYFONT.getOswaldRegular());
+        
+        PROFITTXT = new Text("Total profit/loss:");
+        PROFITTXT.setTextAlignment(TextAlignment.CENTER);
+        PROFITTXT.setFont(MYFONT.getOswaldRegular());
+        PROFIT = new Text();
+        PROFIT.setFont(MYFONT.getOswaldRegular());
+        
+        if(PERF.getTotalProfit() > 0){
+            String MESSAGE5 = String.valueOf(PERF.getTotalProfit());
+            PROFIT.setText("+ "+MESSAGE5 + " USD   ");
+            PROFIT.setFill(Color.CHARTREUSE);
+        }else{
+            String MESSAGE5 = String.valueOf(PERF.getTotalProfit());
+            PROFIT.setText(MESSAGE5 + " USD   ");
+            PROFIT.setFill(MYFONT.getTitleColor());
+              
+        }
+        PROFITBOX.getChildren().add(PROFIT);
+        PROFITBOX.setPadding(new Insets(10,10,10,15));
+        PROFITBOX.setAlignment(Pos.CENTER);
+        
+        SHARESBOX.getChildren().addAll(GAINSTOCKS, GAINSTOCKSPERCENTAGE);
+        SHARESBOX.setPadding(new Insets(10,10,10,15));
+        SHARESBOX.setAlignment(Pos.CENTER);
+        
+        OVERRALBOX.getChildren().addAll(GAINOVERRAL, GAINOVERRALPERCENTAGE);
+        OVERRALBOX.setPadding(new Insets(10,10,10,15));
+        OVERRALBOX.setAlignment(Pos.CENTER);
+        
+        
+        GRID.setAlignment(Pos.CENTER);
+        GRID.setPadding(new Insets(0, 0, 15, 20));
+        GRID.setVgap(10);
+        GRID.add(GAINSTOCKSTXT, 0, 0);
+        GRID.add(SHARESBOX, 0, 1);
+        GRID.add(GAINOVERRALTXT, 0, 2);
+        GRID.add(OVERRALBOX, 0, 3);
+        GRID.add(PROFITTXT, 0, 4);
+        GRID.add(PROFITBOX, 0, 5); 
+        GRID.add(RESETBTN, 1, 9);
+        
+        return GRID;
     }
     
     public GridPane DesignPerfStart(GridPane GRID, VBox TOP){
@@ -163,41 +197,57 @@ public class DesignPerf {
     }
     
     public GridPane DesignPerfOnlySold(GridPane GRID, VBox TOP) throws IOException, ApiException{
+        GRID.setHgap(5);
         MYFONT = new MyFont();
+        DSADD = new DesignAdd();
+        TOPMANAGE = new TopManagement();
+        PROFITBOX = new HBox(50);
         PERF = new PerformanceController();
         
-        ADDTXT = new Text("+");
-        ADDTXT.setFont(MYFONT.getOswaldRegular());
-        ADDTXT.setFill(Color.CHARTREUSE);
+        RESETBTN = new Button();
+        RESETBTN.setText("RESET ALL PORTFOLIO");
+        RESETBTN.setFont(MYFONT.getOswaldButton());
+        RESETBTN.getStyleClass().add("submitButton");
+        RESETBTN.setOnAction((ActionEvent e) -> {
+            GRID.getChildren().clear();
+            try {
+                DesignPerfConfirmReset(GRID,TOP);
+            } catch (IOException ex) {
+                Logger.getLogger(DesignPerf.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         
-        SUBTRACTTXT = new Text("-");
-        SUBTRACTTXT.setFont(MYFONT.getOswaldRegular());
-        SUBTRACTTXT.setFill(MYFONT.getTitleColor());
-        
-        PERCENTAGETXT = new Text("%");
-        PERCENTAGETXT.setFont(MYFONT.getOswaldRegular());
-        
-        String TOTALPROFIT = String.valueOf(PERF.getTotalProfit());
-        String TOTALPROFITPERCENTAGE = String.valueOf(PERF.getTotalGainPercentage());
-        
-        PROFIT = new Text(TOTALPROFIT + " ");
+        STARTPORT = new Text("No current investment. Start portfolio");
+        PROFITTXT = new Text("Total profit/loss:");
+        PROFITTXT.setTextAlignment(TextAlignment.CENTER);
+        PROFITTXT.setFont(MYFONT.getOswaldRegular());
+        PROFIT = new Text();
         PROFIT.setFont(MYFONT.getOswaldRegular());
         
-        PROFITPERCENTAGE = new Text(TOTALPROFITPERCENTAGE + " ");
-        PROFITPERCENTAGE.setFont(MYFONT.getOswaldRegular());
-        
-        PROFITFLOW = new TextFlow();
-        
         if(PERF.getTotalProfit() > 0){
-            PROFITFLOW.getChildren().addAll(ADDTXT,PROFIT,PROFITPERCENTAGE,PERCENTAGETXT);
+            String MESSAGE5 = String.valueOf(PERF.getTotalProfit());
+            PROFIT.setText("+ "+MESSAGE5 + " USD   ");
+            PROFIT.setFill(Color.CHARTREUSE);
         }else{
-            PROFITFLOW.getChildren().addAll(SUBTRACTTXT,PROFIT,PROFITPERCENTAGE,PERCENTAGETXT);
+            String MESSAGE5 = String.valueOf(PERF.getTotalProfit());
+            PROFIT.setText(MESSAGE5 + " USD   ");
+            PROFIT.setFill(MYFONT.getTitleColor());
+              
         }
+        PROFITBOX = new HBox();
+        PROFITBOX.getChildren().add(PROFIT);
+        PROFITBOX.setPadding(new Insets(10,10,10,15));
+        PROFITBOX.setAlignment(Pos.CENTER);
         
-        GRID.add(PROFITFLOW, 0, 2);
-       
-        GRID.add(RESETBTN, 3, 7);
         
+        STARTPORT.setFont(MYFONT.getOswaldRegular());
+        
+        GRID.setAlignment(Pos.CENTER);
+        GRID.setPadding(new Insets(0, 0, 15, 20));
+        GRID.add(STARTPORT, 0, 0);
+        GRID.add(PROFITTXT, 0, 1);
+        GRID.add(PROFITBOX, 0, 2); 
+        GRID.add(RESETBTN, 1, 9);
         
         return GRID;
     }
@@ -216,6 +266,7 @@ public class DesignPerf {
             try {
                 GRID.getChildren().clear();
                 INVESTCONTROL.deleteAll();
+                DesignPerfPostReset(GRID,TOP);
             } catch (IOException ex) {
                 Logger.getLogger(DesignPerf.class.getName()).log(Level.SEVERE, null, ex);
             }

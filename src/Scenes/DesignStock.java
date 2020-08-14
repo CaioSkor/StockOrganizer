@@ -145,7 +145,7 @@ public class DesignStock {
             }
         });
         
-        SOLDBTN = new Button("Sold");
+        SOLDBTN = new Button("Sell");
         SOLDBTN.setFont(MYFONT.getOswaldButton());
         SOLDBTN.getStyleClass().add("submitButton");
         SOLDBTN.setOnAction(e->{
@@ -404,6 +404,7 @@ public class DesignStock {
         MYFONT = new MyFont();
         
         MESSAGE = new Text("Input price as double");
+        MESSAGE.setFont(MYFONT.getOswaldRegular());
         
         GRID.add(MESSAGE, 0, 0);
         PauseTransition DELAY = new PauseTransition(Duration.seconds(2));
