@@ -283,6 +283,7 @@ public class DesignPerf {
         TOPMANAGE = new TopManagement();
         
         STARTPORT = new Text("Portfolio successfully restarted");
+        STARTPORT.setFont(MYFONT.getOswaldRegular());
         PauseTransition DELAY = new PauseTransition(Duration.seconds(2));
             DELAY.setOnFinished(ev->{
                 GRID.getChildren().clear();

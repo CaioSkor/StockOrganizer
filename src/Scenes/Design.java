@@ -160,6 +160,7 @@ public class Design {
         
         SCENE = new Scene(LAYOUT, 800, 600);
         SCENE.getStylesheets().add("style.css");
+        
     }
     
     public Scene getScreen(){

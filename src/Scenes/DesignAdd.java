@@ -221,6 +221,7 @@ public class DesignAdd {
         ADDANOTHER.setOnAction(e ->{
             GRID.getChildren().clear();
             try {
+                TOPMANAGE.ChangeTop(TOP, "Add investment");
                 MANAGE.DesignAddDefault(GRID, TOP);
             } catch (IOException ex) {
                 Logger.getLogger(DesignAdd.class.getName()).log(Level.SEVERE, null, ex);
