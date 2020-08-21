@@ -35,6 +35,7 @@ public class PerformanceController {
     URL URL;
     Scanner SCANNER;
     private Integer COUNT;
+    private DecimalFormat DF; 
     
     private InvestmentController INVESTCONTROL;
     
@@ -91,14 +92,19 @@ public class PerformanceController {
     
     public String PerformanceCalc(String code, String price) throws IOException, ApiException{
         getCurrentPrice(code);
-        DecimalFormat df = new DecimalFormat("#.##");
-        CURRENTPRICE = Double.valueOf(df.format(CURRENTPRICE));
+        DF = new DecimalFormat("#,##");
+        try{
+            CURRENTPRICE = Double.valueOf(DF.format(CURRENTPRICE));
+        }catch (Exception e){
+            DF = new DecimalFormat("#.##");
+            CURRENTPRICE = Double.valueOf(DF.format(CURRENTPRICE));
+        }
     
         PERFORMANCE = CURRENTPRICE - Double.parseDouble(price);
-        PERFORMANCE = Double.valueOf(df.format(PERFORMANCE));
+        PERFORMANCE = Double.valueOf(DF.format(PERFORMANCE));
         
         PERCENTAGEPERF = PERFORMANCE/Double.parseDouble(price) * 100;
-        PERCENTAGEPERF = Double.valueOf(df.format(PERCENTAGEPERF));
+        PERCENTAGEPERF = Double.valueOf(DF.format(PERCENTAGEPERF));
         
         if(PERFORMANCE > 0){
             PERFORMANCESTRING = "+ " + String.valueOf(PERFORMANCE) + " USD";
@@ -117,8 +123,14 @@ public class PerformanceController {
     
     public String getTotalPerformance(Integer amount){
         TOTALPERF = PERFORMANCE * amount;
-        DecimalFormat df = new DecimalFormat("#.##");
-        TOTALPERF = Double.valueOf(df.format(TOTALPERF));
+        DF = new DecimalFormat("#,##");
+        try{
+            TOTALPERF = Double.valueOf(DF.format(TOTALPERF));
+        }catch (Exception e){
+            DF = new DecimalFormat("#.##");
+            TOTALPERF = Double.valueOf(DF.format(TOTALPERF));
+        }
+
         
         if(TOTALPERF > 0){
             TOTALPERFSTRING = "+ " + String.valueOf(TOTALPERF) + " USD";
@@ -130,7 +142,7 @@ public class PerformanceController {
     }
     
     public void portTotalPerf() throws IOException, ApiException{
-        DecimalFormat df = new DecimalFormat("#.##");
+        DF = new DecimalFormat("#,##");
         INVESTCONTROL = new InvestmentController();
         TOTALPERFORMANCEUNIT = 0;
         if(INVESTCONTROL.getAllCodes()[0][0].equals("NULL")){
@@ -138,21 +150,36 @@ public class PerformanceController {
             for(int i=0; i<INVESTCONTROL.getToutLastPerf().length; i++){
                 TOTALPROFIT = TOTALPROFIT + Double.parseDouble(INVESTCONTROL.getToutLastPerf()[i]);
             }
-            TOTALPROFIT = Double.valueOf(df.format(TOTALPROFIT));            
+            try{
+                TOTALPROFIT = Double.valueOf(DF.format(TOTALPERF));
+            }catch (Exception e){
+                DF = new DecimalFormat("#.##");
+                TOTALPROFIT = Double.valueOf(DF.format(TOTALPERF));
+            }          
         }else{
             System.out.println(INVESTCONTROL.getAllCodes().length);
             for(int i = 0; i < INVESTCONTROL.getAllCodes().length; i++){
                 PerformanceCalc(INVESTCONTROL.getAllCodes()[i][0], INVESTCONTROL.getAllCodes()[i][1]);
                 TOTALPERFORMANCEUNIT = TOTALPERFORMANCEUNIT + (PERFORMANCE*Integer.parseInt(INVESTCONTROL.getAllAmounts()[i]));
             }
-            TOTALPERFORMANCEUNIT = Double.valueOf(df.format(TOTALPERFORMANCEUNIT));
-
+            try{
+                TOTALPERFORMANCEUNIT = Double.valueOf(DF.format(TOTALPERFORMANCEUNIT));
+            }catch (Exception e){
+                DF = new DecimalFormat("#.##");
+                TOTALPERFORMANCEUNIT = Double.valueOf(DF.format(TOTALPERFORMANCEUNIT));
+            }   
+            
             TOTALPRICES = 0;
             for(int i=0; i < INVESTCONTROL.getAllCodes().length; i++){
                 TOTALPRICES = TOTALPRICES + (Double.parseDouble(INVESTCONTROL.getAllCodes()[i][1]) * Integer.parseInt(INVESTCONTROL.getAllAmounts()[i]));
             }
             TOTALPERFORMANCEPERC = TOTALPERFORMANCEUNIT/TOTALPRICES*100;
-            TOTALPERFORMANCEPERC = Double.valueOf(df.format(TOTALPERFORMANCEPERC));
+            try{
+                TOTALPERFORMANCEPERC = Double.valueOf(DF.format(TOTALPERFORMANCEPERC));
+            }catch (Exception e){
+                DF = new DecimalFormat("#.##");
+                TOTALPERFORMANCEPERC = Double.valueOf(DF.format(TOTALPERFORMANCEPERC));
+            }  
             System.out.println(TOTALPERFORMANCEUNIT);
 
             if(!INVESTCONTROL.getToutLastPerf()[0].equals("NULL")){
@@ -162,12 +189,26 @@ public class PerformanceController {
                     TOTALPERFORMANCEALL = TOTALPERFORMANCEALL + Double.parseDouble(INVESTCONTROL.getToutLastPerf()[i]);
                     TOTALPROFIT = TOTALPROFIT + Double.parseDouble(INVESTCONTROL.getToutLastPerf()[i]);
                 }
-                TOTALPERFORMANCEALL = Double.valueOf(df.format(TOTALPERFORMANCEALL));
-                TOTALPROFIT = Double.valueOf(df.format(TOTALPROFIT));
+                
+                try{
+                    TOTALPERFORMANCEALL = Double.valueOf(DF.format(TOTALPERFORMANCEALL));
+                    TOTALPROFIT = Double.valueOf(DF.format(TOTALPROFIT));
+                }catch (Exception e){
+                    DF = new DecimalFormat("#.##");
+                    TOTALPERFORMANCEALL = Double.valueOf(DF.format(TOTALPERFORMANCEALL));
+                    TOTALPROFIT = Double.valueOf(DF.format(TOTALPROFIT));
+                }  
+                
 
                 TOTALGAINPERCENTAGE = TOTALPERFORMANCEALL/TOTALPRICES*100;
                 System.out.println(TOTALPERFORMANCEALL);
-                TOTALGAINPERCENTAGE = Double.valueOf(df.format(TOTALGAINPERCENTAGE));
+                try{
+                    TOTALGAINPERCENTAGE = Double.valueOf(DF.format(TOTALGAINPERCENTAGE));
+                }catch (Exception e){
+                    DF = new DecimalFormat("#.##");
+                    TOTALGAINPERCENTAGE = Double.valueOf(DF.format(TOTALGAINPERCENTAGE));
+                }  
+                
             }
         }
     }

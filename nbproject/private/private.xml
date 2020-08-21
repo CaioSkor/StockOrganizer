@@ -2,6 +2,16 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/Users/caio/NetBeansProjects/StockOrganizer/src/Scenes/DesignPerf.java</file>
+            <file>file:/Users/caio/NetBeansProjects/StockOrganizer/src/controllers/GetTicker.java</file>
+            <file>file:/Users/caio/NetBeansProjects/StockOrganizer/src/controllers/PerformanceController.java</file>
+            <file>file:/Users/caio/NetBeansProjects/StockOrganizer/src/Scenes/DesignHome.java</file>
+            <file>file:/Users/caio/NetBeansProjects/StockOrganizer/src/Scenes/MyFont.java</file>
+            <file>file:/Users/caio/NetBeansProjects/StockOrganizer/src/Scenes/DesignGraph.java</file>
+            <file>file:/Users/caio/NetBeansProjects/StockOrganizer/src/Scenes/DesignStock.java</file>
+            <file>file:/Users/caio/NetBeansProjects/StockOrganizer/src/Scenes/DesignInv.java</file>
+            <file>file:/Users/caio/NetBeansProjects/StockOrganizer/src/Scenes/DesignAdd.java</file>
+        </group>
     </open-files>
 </project-private>
