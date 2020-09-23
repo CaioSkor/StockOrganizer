@@ -34,6 +34,7 @@ public class InvestmentController {
     private LastPerformance LAST;
     
     public InvestmentController() throws IOException{
+        
         FILEREADER = new FileReader("data/investment.txt");
         BUFFEREDREADER = new BufferedReader(FILEREADER);
         INVESTIMENTS = new LinkedList<Investment>();    
@@ -145,17 +146,16 @@ public class InvestmentController {
     
     public void updateInvestment(String code, String price, String amount, String date, String reason, String newPrice, String newAmnt, String newDate, String newReason, String deldate) throws IOException{
         DecimalFormat df = new DecimalFormat("#.##");
-        Integer SURE = 0;
+        boolean REPEATED = false;
         for(int i = 0; i < REPEATEDINVESTMENTS.size(); i++){
             if(REPEATEDINVESTMENTS.get(i).getCode().equals(code)){
-                SURE++;
+                REPEATED = true;
+                break;
             }
         }
         
-        if(SURE>0){
-            createRepeatedInvestment(code, newPrice, newAmnt, newDate, newReason, deldate);
-        }else{
-            createRepeatedInvestment(code, newPrice, newAmnt, newDate, newReason, deldate);
+        createRepeatedInvestment(code, newPrice, newAmnt, newDate, newReason, deldate);
+        if(!REPEATED){
             createRepeatedInvestment(code, price, amount, date, reason, deldate);
         }
         FileWriter fileWriter = new FileWriter("data/investment.txt");

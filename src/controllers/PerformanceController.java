@@ -1,8 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
+
+
+*/
+
 package controllers;
 
 import com.intrinio.api.SecurityApi;
@@ -92,11 +93,11 @@ public class PerformanceController {
     
     public String PerformanceCalc(String code, String price) throws IOException, ApiException{
         getCurrentPrice(code);
-        DF = new DecimalFormat("#,##");
+        DF = new DecimalFormat("#.##");
         try{
             CURRENTPRICE = Double.valueOf(DF.format(CURRENTPRICE));
         }catch (Exception e){
-            DF = new DecimalFormat("#.##");
+            DF = new DecimalFormat("#,##");
             CURRENTPRICE = Double.valueOf(DF.format(CURRENTPRICE));
         }
     
@@ -123,11 +124,11 @@ public class PerformanceController {
     
     public String getTotalPerformance(Integer amount){
         TOTALPERF = PERFORMANCE * amount;
-        DF = new DecimalFormat("#,##");
+        DF = new DecimalFormat("#.##");
         try{
             TOTALPERF = Double.valueOf(DF.format(TOTALPERF));
         }catch (Exception e){
-            DF = new DecimalFormat("#.##");
+            DF = new DecimalFormat("#,##");
             TOTALPERF = Double.valueOf(DF.format(TOTALPERF));
         }
 
@@ -142,7 +143,7 @@ public class PerformanceController {
     }
     
     public void portTotalPerf() throws IOException, ApiException{
-        DF = new DecimalFormat("#,##");
+        DF = new DecimalFormat("#.##");
         INVESTCONTROL = new InvestmentController();
         TOTALPERFORMANCEUNIT = 0;
         if(INVESTCONTROL.getAllCodes()[0][0].equals("NULL")){
@@ -153,7 +154,7 @@ public class PerformanceController {
             try{
                 TOTALPROFIT = Double.valueOf(DF.format(TOTALPERF));
             }catch (Exception e){
-                DF = new DecimalFormat("#.##");
+                DF = new DecimalFormat("#,##");
                 TOTALPROFIT = Double.valueOf(DF.format(TOTALPERF));
             }          
         }else{
@@ -165,7 +166,7 @@ public class PerformanceController {
             try{
                 TOTALPERFORMANCEUNIT = Double.valueOf(DF.format(TOTALPERFORMANCEUNIT));
             }catch (Exception e){
-                DF = new DecimalFormat("#.##");
+                DF = new DecimalFormat("#,##");
                 TOTALPERFORMANCEUNIT = Double.valueOf(DF.format(TOTALPERFORMANCEUNIT));
             }   
             
@@ -177,7 +178,7 @@ public class PerformanceController {
             try{
                 TOTALPERFORMANCEPERC = Double.valueOf(DF.format(TOTALPERFORMANCEPERC));
             }catch (Exception e){
-                DF = new DecimalFormat("#.##");
+                DF = new DecimalFormat("#,##");
                 TOTALPERFORMANCEPERC = Double.valueOf(DF.format(TOTALPERFORMANCEPERC));
             }  
             System.out.println(TOTALPERFORMANCEUNIT);
@@ -205,7 +206,7 @@ public class PerformanceController {
                 try{
                     TOTALGAINPERCENTAGE = Double.valueOf(DF.format(TOTALGAINPERCENTAGE));
                 }catch (Exception e){
-                    DF = new DecimalFormat("#.##");
+                    DF = new DecimalFormat("#,##");
                     TOTALGAINPERCENTAGE = Double.valueOf(DF.format(TOTALGAINPERCENTAGE));
                 }  
                 
