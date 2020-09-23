@@ -328,4 +328,27 @@ public class DesignInv {
         
         return GRID;
     }
+    
+ /*   public void CurrentPopulateMe(Stage MAINWINDOW, Integer RESTE, Integer CHOICE, GridPane GRID) throws IOException{
+        MIDDLE[INDEXA] = new HBox(10);
+        for(INDEX=0; INDEX< RESTE; INDEX++){         
+            STOCKBTN[INDEX+(3*INDEXA)] = new Button();
+            STOCKBTN[INDEX+(3*INDEXA)].setPrefWidth(110);
+            STOCKBTN[INDEX+(3*INDEXA)].setText(TICKERS.GetTicker("data/investment.txt",CHOICE)[INDEX+(3*INDEXA)]); 
+            STOCKBTN[INDEX+(3*INDEXA)].setOnAction((ActionEvent e) -> {
+                final Integer BUTTONID = INDEX;
+                System.out.println("Button pressed " + ((Button) e.getSource()).getText());
+                int LASTBUTTON = BUTTONID;                
+                try {
+                    DSSTOCK = new DesignStock();
+                    DSSTOCK.DesignStock(MAINWINDOW, GRID,((Button) e.getSource()).getText());
+                } catch (IOException ex) {
+                    System.out.println("PROBLEMS");
+                } catch (ApiException ex) {
+                    Logger.getLogger(DesignInv.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });                
+            MIDDLE[INDEXA].getChildren().add(STOCKBTN[INDEX+(3*INDEXA)]);     
+        }
+    }*/
 }

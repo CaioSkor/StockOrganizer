@@ -36,7 +36,6 @@ public class PerformanceController {
     URL URL;
     Scanner SCANNER;
     private Integer COUNT;
-    private DecimalFormat DF; 
     
     private InvestmentController INVESTCONTROL;
     
@@ -93,6 +92,7 @@ public class PerformanceController {
     
     public String PerformanceCalc(String code, String price) throws IOException, ApiException{
         getCurrentPrice(code);
+<<<<<<< HEAD
         DF = new DecimalFormat("#.##");
         try{
             CURRENTPRICE = Double.valueOf(DF.format(CURRENTPRICE));
@@ -100,12 +100,16 @@ public class PerformanceController {
             DF = new DecimalFormat("#,##");
             CURRENTPRICE = Double.valueOf(DF.format(CURRENTPRICE));
         }
+=======
+        DecimalFormat df = new DecimalFormat("#.##");
+        CURRENTPRICE = Double.valueOf(df.format(CURRENTPRICE));
+>>>>>>> parent of a759147... commit currencyProblem
     
         PERFORMANCE = CURRENTPRICE - Double.parseDouble(price);
-        PERFORMANCE = Double.valueOf(DF.format(PERFORMANCE));
+        PERFORMANCE = Double.valueOf(df.format(PERFORMANCE));
         
         PERCENTAGEPERF = PERFORMANCE/Double.parseDouble(price) * 100;
-        PERCENTAGEPERF = Double.valueOf(DF.format(PERCENTAGEPERF));
+        PERCENTAGEPERF = Double.valueOf(df.format(PERCENTAGEPERF));
         
         if(PERFORMANCE > 0){
             PERFORMANCESTRING = "+ " + String.valueOf(PERFORMANCE) + " USD";
@@ -124,6 +128,7 @@ public class PerformanceController {
     
     public String getTotalPerformance(Integer amount){
         TOTALPERF = PERFORMANCE * amount;
+<<<<<<< HEAD
         DF = new DecimalFormat("#.##");
         try{
             TOTALPERF = Double.valueOf(DF.format(TOTALPERF));
@@ -132,6 +137,10 @@ public class PerformanceController {
             TOTALPERF = Double.valueOf(DF.format(TOTALPERF));
         }
 
+=======
+        DecimalFormat df = new DecimalFormat("#.##");
+        TOTALPERF = Double.valueOf(df.format(TOTALPERF));
+>>>>>>> parent of a759147... commit currencyProblem
         
         if(TOTALPERF > 0){
             TOTALPERFSTRING = "+ " + String.valueOf(TOTALPERF) + " USD";
@@ -143,7 +152,11 @@ public class PerformanceController {
     }
     
     public void portTotalPerf() throws IOException, ApiException{
+<<<<<<< HEAD
         DF = new DecimalFormat("#.##");
+=======
+        DecimalFormat df = new DecimalFormat("#.##");
+>>>>>>> parent of a759147... commit currencyProblem
         INVESTCONTROL = new InvestmentController();
         TOTALPERFORMANCEUNIT = 0;
         if(INVESTCONTROL.getAllCodes()[0][0].equals("NULL")){
@@ -151,18 +164,23 @@ public class PerformanceController {
             for(int i=0; i<INVESTCONTROL.getToutLastPerf().length; i++){
                 TOTALPROFIT = TOTALPROFIT + Double.parseDouble(INVESTCONTROL.getToutLastPerf()[i]);
             }
+<<<<<<< HEAD
             try{
                 TOTALPROFIT = Double.valueOf(DF.format(TOTALPERF));
             }catch (Exception e){
                 DF = new DecimalFormat("#,##");
                 TOTALPROFIT = Double.valueOf(DF.format(TOTALPERF));
             }          
+=======
+            TOTALPROFIT = Double.valueOf(df.format(TOTALPROFIT));            
+>>>>>>> parent of a759147... commit currencyProblem
         }else{
             System.out.println(INVESTCONTROL.getAllCodes().length);
             for(int i = 0; i < INVESTCONTROL.getAllCodes().length; i++){
                 PerformanceCalc(INVESTCONTROL.getAllCodes()[i][0], INVESTCONTROL.getAllCodes()[i][1]);
                 TOTALPERFORMANCEUNIT = TOTALPERFORMANCEUNIT + (PERFORMANCE*Integer.parseInt(INVESTCONTROL.getAllAmounts()[i]));
             }
+<<<<<<< HEAD
             try{
                 TOTALPERFORMANCEUNIT = Double.valueOf(DF.format(TOTALPERFORMANCEUNIT));
             }catch (Exception e){
@@ -170,17 +188,25 @@ public class PerformanceController {
                 TOTALPERFORMANCEUNIT = Double.valueOf(DF.format(TOTALPERFORMANCEUNIT));
             }   
             
+=======
+            TOTALPERFORMANCEUNIT = Double.valueOf(df.format(TOTALPERFORMANCEUNIT));
+
+>>>>>>> parent of a759147... commit currencyProblem
             TOTALPRICES = 0;
             for(int i=0; i < INVESTCONTROL.getAllCodes().length; i++){
                 TOTALPRICES = TOTALPRICES + (Double.parseDouble(INVESTCONTROL.getAllCodes()[i][1]) * Integer.parseInt(INVESTCONTROL.getAllAmounts()[i]));
             }
             TOTALPERFORMANCEPERC = TOTALPERFORMANCEUNIT/TOTALPRICES*100;
+<<<<<<< HEAD
             try{
                 TOTALPERFORMANCEPERC = Double.valueOf(DF.format(TOTALPERFORMANCEPERC));
             }catch (Exception e){
                 DF = new DecimalFormat("#,##");
                 TOTALPERFORMANCEPERC = Double.valueOf(DF.format(TOTALPERFORMANCEPERC));
             }  
+=======
+            TOTALPERFORMANCEPERC = Double.valueOf(df.format(TOTALPERFORMANCEPERC));
+>>>>>>> parent of a759147... commit currencyProblem
             System.out.println(TOTALPERFORMANCEUNIT);
 
             if(!INVESTCONTROL.getToutLastPerf()[0].equals("NULL")){
@@ -190,19 +216,12 @@ public class PerformanceController {
                     TOTALPERFORMANCEALL = TOTALPERFORMANCEALL + Double.parseDouble(INVESTCONTROL.getToutLastPerf()[i]);
                     TOTALPROFIT = TOTALPROFIT + Double.parseDouble(INVESTCONTROL.getToutLastPerf()[i]);
                 }
-                
-                try{
-                    TOTALPERFORMANCEALL = Double.valueOf(DF.format(TOTALPERFORMANCEALL));
-                    TOTALPROFIT = Double.valueOf(DF.format(TOTALPROFIT));
-                }catch (Exception e){
-                    DF = new DecimalFormat("#.##");
-                    TOTALPERFORMANCEALL = Double.valueOf(DF.format(TOTALPERFORMANCEALL));
-                    TOTALPROFIT = Double.valueOf(DF.format(TOTALPROFIT));
-                }  
-                
+                TOTALPERFORMANCEALL = Double.valueOf(df.format(TOTALPERFORMANCEALL));
+                TOTALPROFIT = Double.valueOf(df.format(TOTALPROFIT));
 
                 TOTALGAINPERCENTAGE = TOTALPERFORMANCEALL/TOTALPRICES*100;
                 System.out.println(TOTALPERFORMANCEALL);
+<<<<<<< HEAD
                 try{
                     TOTALGAINPERCENTAGE = Double.valueOf(DF.format(TOTALGAINPERCENTAGE));
                 }catch (Exception e){
@@ -210,6 +229,9 @@ public class PerformanceController {
                     TOTALGAINPERCENTAGE = Double.valueOf(DF.format(TOTALGAINPERCENTAGE));
                 }  
                 
+=======
+                TOTALGAINPERCENTAGE = Double.valueOf(df.format(TOTALGAINPERCENTAGE));
+>>>>>>> parent of a759147... commit currencyProblem
             }
         }
     }
