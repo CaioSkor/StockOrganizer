@@ -90,21 +90,20 @@ public class DesignGraph {
                 SERIES.setName("line");
                 
                 String freq = (String) FREQUENCY.getValue();
-                    HISTORICAL = PERF.getHistPrices(TICKER, freq);
-                System.out.println(HISTORICAL[0][1]);
+                HISTORICAL = PERF.getHistPrices(TICKER, freq);
                 
                 // Setting upper and lower bounds
                 Integer i = 0;
-                Double UPPER = Double.valueOf(HISTORICAL[0][1]);
-                Double LOWER = Double.valueOf(HISTORICAL[0][1]);
+                Double UPPER = Double.valueOf(HISTORICAL[0][0]);
+                Double LOWER = Double.valueOf(HISTORICAL[0][0]);
                 while(i < HISTORICAL.length){
                     // Find the maximum vlaue
-                    if(UPPER < Double.valueOf(HISTORICAL[i][1])){
-                        UPPER = Double.valueOf(HISTORICAL[i][1]);
+                    if(UPPER < Double.valueOf(HISTORICAL[i][0])){
+                        UPPER = Double.valueOf(HISTORICAL[i][0]);
                     }
                     // Find the minimum value
-                    else if(LOWER > Double.valueOf(HISTORICAL[i][1])){
-                        LOWER = Double.valueOf(HISTORICAL[i][1]);
+                    else if(LOWER > Double.valueOf(HISTORICAL[i][0])){
+                        LOWER = Double.valueOf(HISTORICAL[i][0]);
                     }
                     i++;
                 }
@@ -114,7 +113,7 @@ public class DesignGraph {
                 
                 Integer INDEX = 0;
                 while(INDEX < HISTORICAL.length){
-                    SERIES.getData().add(new XYChart.Data(HISTORICAL[INDEX][0],Double.parseDouble(HISTORICAL[INDEX][1])));
+                    SERIES.getData().add(new XYChart.Data(HISTORICAL[INDEX][1],Double.parseDouble(HISTORICAL[INDEX][0])));
                     INDEX++;
                 }
                 XAXIS = new CategoryAxis();
@@ -130,7 +129,7 @@ public class DesignGraph {
                 
                 Node line = SERIES.getNode().lookup(".SERIES-SERIES-area-line;");
                 Integer LENGTH = HISTORICAL.length -1;
-                if((Double.valueOf(HISTORICAL[0][1]) - Double.valueOf(HISTORICAL[LENGTH][1])) > 0){
+                if((Double.valueOf(HISTORICAL[0][0]) - Double.valueOf(HISTORICAL[LENGTH][0])) > 0){
                     SERIES.getNode().setStyle("-fx-stroke: #cc0000ff;");
                 }else{
                     SERIES.getNode().setStyle("-fx-stroke: #7fff00;");

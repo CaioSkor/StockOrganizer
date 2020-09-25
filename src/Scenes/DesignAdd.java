@@ -237,7 +237,7 @@ public class DesignAdd {
         return GRID;
     }
     
-    public GridPane DesignAddWrongfulInputs (GridPane GRID, String[] BLANK, boolean[] CORRECT, Integer INDEX, VBox TOP){
+    public GridPane DesignAddWrongfulInputs (GridPane GRID, String[] BLANK, boolean[] TYPECHECK, Integer INDEX, VBox TOP){
         MYFONT = new MyFont();
         MANAGE = new GridPaneManagement();
         
@@ -273,7 +273,7 @@ public class DesignAdd {
                         GRID.add(MSG3, 0, 0);
                         break;
                     }
-                    else if(CORRECT[1]){
+                    else if(TYPECHECK[1]){
                         GRID.add(MSG3, 0, 0);
                         GRID.add(MSG2, 0, 1);
                         break;
@@ -282,8 +282,8 @@ public class DesignAdd {
                         GRID.add(MSG1, 0, 1);
                         break;
                     }
-                }else if(CORRECT[0]){
-                    if(CORRECT[1]){
+                }else if(TYPECHECK[0]){
+                    if(TYPECHECK[1]){
                         GRID.add(MSG3, 0, 0);
                         GRID.add(MSG1, 0, 1);
                         GRID.add(MSG2, 0, 2);
@@ -293,7 +293,7 @@ public class DesignAdd {
                        GRID.add(MSG1, 0, 1);  
                        break;
                     }
-                }else if(CORRECT[1]){
+                }else if(TYPECHECK[1]){
                     GRID.add(MSG3, 0, 0);
                     GRID.add(MSG2, 0, 1);
                     break;
@@ -302,20 +302,16 @@ public class DesignAdd {
                     break;
                 }
             }
-        }else{
-            if(CORRECT[0]){
-                if(CORRECT[1]){
-                    GRID.add(MSG1, 0, 0);
-                    GRID.add(MSG2, 0, 1);
-                }else{
-                    GRID.add(MSG1, 0, 0);
-                }
+        }else if(TYPECHECK[0]){
+            if(TYPECHECK[1]){
+                GRID.add(MSG1, 0, 0);
+                GRID.add(MSG2, 0, 1);
             }else{
-                if(CORRECT[1]){
-                    GRID.add(MSG2, 0, 0);
-                }
+                GRID.add(MSG1, 0, 0);
             }
-        }       
+        }else if(TYPECHECK[1]){
+            GRID.add(MSG2, 0, 0);
+        }      
         GRID.add(BACKBTN, 0, 10);
         
         return GRID;

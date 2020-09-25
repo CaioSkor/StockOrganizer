@@ -61,7 +61,7 @@ public class NewInvestmentProcessor {
             if(INPUTS[i] != null && !INPUTS[i].trim().isEmpty()){
                 WRONGINPUTS[i] = null;
             }else{
-                WRONGINPUTS[i] = "1";
+                WRONGINPUTS[i] = "0";
             }
         }
         System.out.println(WRONGINPUTS[1]);
@@ -84,21 +84,27 @@ public class NewInvestmentProcessor {
         INPUT[2] = "date";
         INPUT[3] = "reason";
         
-        for(int i=0; i < checkInputs(PRICE, AMOUNT, DATE, REASON).length; i++){
-            if(checkInputs(PRICE, AMOUNT, DATE, REASON)[i].equals(0)){
-                COUNT++;
-            }
-        }
-        
         INPUTCHECK = new boolean[4];
-        BLANK = new String[COUNT];
         TYPECHECK = new boolean[4];
         
         for(int i=0; i < checkInputs(PRICE, AMOUNT, DATE, REASON).length; i++){
-            if(checkInputs(PRICE, AMOUNT, DATE, REASON)[i].equals(0)){
+            if(checkInputs(PRICE, AMOUNT, DATE, REASON)[i] == "0"){
+                COUNT++;
                 TYPECHECK[i] = false;
                 INPUTCHECK[i] = true;
-            }else if(checkInputs(PRICE, AMOUNT, DATE, REASON)[i].equals(0)){
+            }else if(checkInputs(PRICE, AMOUNT, DATE, REASON)[i] == "1"){
+                TYPECHECK[i] = true;
+                INPUTCHECK[i] = false;
+            }
+        }
+        
+        BLANK = new String[COUNT];
+        
+        for(int i=0; i < checkInputs(PRICE, AMOUNT, DATE, REASON).length; i++){
+            if(checkInputs(PRICE, AMOUNT, DATE, REASON)[i] == "0"){
+                TYPECHECK[i] = false;
+                INPUTCHECK[i] = true;
+            }else if(checkInputs(PRICE, AMOUNT, DATE, REASON)[i] == "1"){
                 TYPECHECK[i] = true;
                 INPUTCHECK[i] = false;
             }

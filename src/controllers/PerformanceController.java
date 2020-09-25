@@ -1,8 +1,3 @@
-/*
-
-
-
-*/
 
 package controllers;
 
@@ -12,13 +7,21 @@ import com.intrinio.invoker.ApiException;
 import com.intrinio.invoker.Configuration;
 import com.intrinio.invoker.auth.ApiKeyAuth;
 import com.intrinio.models.ApiResponseSecurityStockPrices;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.util.Scanner;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.threeten.bp.LocalDate;
 
 
@@ -36,6 +39,8 @@ public class PerformanceController {
     URL URL;
     Scanner SCANNER;
     private Integer COUNT;
+    private DecimalFormat DF; 
+    private StringBuilder BUILDER;
     
     private InvestmentController INVESTCONTROL;
     
@@ -60,56 +65,53 @@ public class PerformanceController {
     }
     
     public void getHistoricalPrices(String code, String freq) throws MalformedURLException, IOException{   
-        URLSTRING = "https://api.intrinio.com/prices.csv?identifier="+code+"&start_date=1950-01-01&frequency="+freq+"&sort_order=desc&page_size=90&api_key=OjExODcwODU1MGNkODYwY2Y4MWViZjQxM2FjZTMzY2Iw";
-        URL = new URL(URLSTRING);
+        URLSTRING = "https://api-v2.intrinio.com/securities/"+code+"/prices?&frequency="+freq+"&api_key=OjExODcwODU1MGNkODYwY2Y4MWViZjQxM2FjZTMzY2Iw";
         
-        HISTORICALINFO = new String[90][2];
-        COUNT = 0;
-        SCANNER = new Scanner(URL.openStream());
-  
-        while (SCANNER.hasNext()) {
-            LINE = SCANNER.nextLine();
-            COMPONENTS = LINE.split(",");
-            try{
-                Double.parseDouble(COMPONENTS[2]);
-                HISTORICALINFO[89-COUNT][0] = COMPONENTS[0];
-                HISTORICALINFO[89-COUNT][1] = COMPONENTS[4];
-                COUNT++;
-            }catch(NumberFormatException er){
-                System.out.println("NOT DATE");
-            }
+        InputStream INPUT = new URL(URLSTRING).openStream();
+        BufferedReader READER = new BufferedReader(new InputStreamReader(INPUT, Charset.forName("UTF-8")));
+        BUILDER = new StringBuilder();
+        int CP;
+        
+        
+        while ((CP = READER.read()) != -1) {
+            BUILDER.append((char) CP);
         }
-        SCANNER.close();
         
-        HISTORICAL = new String[COUNT][2];
-        Integer CHECK = 0;
-        for(int i=1; i <= COUNT; i++){
-            HISTORICAL[COUNT-i][0] = HISTORICALINFO[89-CHECK][0];
-            HISTORICAL[COUNT-i][1] = HISTORICALINFO[89-CHECK][1];
-            CHECK++;
-        }     
+        String JSONTEXT = BUILDER.toString();
+        JSONObject JSON = new JSONObject(JSONTEXT);
+        
+          
+        JSONArray ARRAY = JSON.getJSONArray("stock_prices");
+        HISTORICALINFO = new String[ARRAY.length()][2];
+        COUNT = 0;
+        System.out.println(ARRAY.length());
+        for (int i = 0; i < ARRAY.length(); i++) {
+            System.out.println(COUNT);
+            HISTORICALINFO[ARRAY.length()-COUNT-1][0] = String.valueOf(ARRAY.getJSONObject(i).getDouble("close"));
+            HISTORICALINFO[ARRAY.length()-COUNT-1][1] = ARRAY.getJSONObject(i).getString("date");
+            COUNT++;
+        }
+        
+        INPUT.close();
     }
+    
+   
     
     public String PerformanceCalc(String code, String price) throws IOException, ApiException{
         getCurrentPrice(code);
-<<<<<<< HEAD
         DF = new DecimalFormat("#.##");
         try{
             CURRENTPRICE = Double.valueOf(DF.format(CURRENTPRICE));
         }catch (Exception e){
-            DF = new DecimalFormat("#,##");
+            DF = new DecimalFormat("#.##");
             CURRENTPRICE = Double.valueOf(DF.format(CURRENTPRICE));
         }
-=======
-        DecimalFormat df = new DecimalFormat("#.##");
-        CURRENTPRICE = Double.valueOf(df.format(CURRENTPRICE));
->>>>>>> parent of a759147... commit currencyProblem
     
         PERFORMANCE = CURRENTPRICE - Double.parseDouble(price);
-        PERFORMANCE = Double.valueOf(df.format(PERFORMANCE));
+        PERFORMANCE = Double.valueOf(DF.format(PERFORMANCE));
         
         PERCENTAGEPERF = PERFORMANCE/Double.parseDouble(price) * 100;
-        PERCENTAGEPERF = Double.valueOf(df.format(PERCENTAGEPERF));
+        PERCENTAGEPERF = Double.valueOf(DF.format(PERCENTAGEPERF));
         
         if(PERFORMANCE > 0){
             PERFORMANCESTRING = "+ " + String.valueOf(PERFORMANCE) + " USD";
@@ -128,19 +130,14 @@ public class PerformanceController {
     
     public String getTotalPerformance(Integer amount){
         TOTALPERF = PERFORMANCE * amount;
-<<<<<<< HEAD
-        DF = new DecimalFormat("#.##");
+        DF = new DecimalFormat("#,##");
         try{
             TOTALPERF = Double.valueOf(DF.format(TOTALPERF));
         }catch (Exception e){
-            DF = new DecimalFormat("#,##");
+            DF = new DecimalFormat("#.##");
             TOTALPERF = Double.valueOf(DF.format(TOTALPERF));
         }
 
-=======
-        DecimalFormat df = new DecimalFormat("#.##");
-        TOTALPERF = Double.valueOf(df.format(TOTALPERF));
->>>>>>> parent of a759147... commit currencyProblem
         
         if(TOTALPERF > 0){
             TOTALPERFSTRING = "+ " + String.valueOf(TOTALPERF) + " USD";
@@ -152,11 +149,7 @@ public class PerformanceController {
     }
     
     public void portTotalPerf() throws IOException, ApiException{
-<<<<<<< HEAD
-        DF = new DecimalFormat("#.##");
-=======
-        DecimalFormat df = new DecimalFormat("#.##");
->>>>>>> parent of a759147... commit currencyProblem
+        DF = new DecimalFormat("#,##");
         INVESTCONTROL = new InvestmentController();
         TOTALPERFORMANCEUNIT = 0;
         if(INVESTCONTROL.getAllCodes()[0][0].equals("NULL")){
@@ -164,49 +157,36 @@ public class PerformanceController {
             for(int i=0; i<INVESTCONTROL.getToutLastPerf().length; i++){
                 TOTALPROFIT = TOTALPROFIT + Double.parseDouble(INVESTCONTROL.getToutLastPerf()[i]);
             }
-<<<<<<< HEAD
             try{
                 TOTALPROFIT = Double.valueOf(DF.format(TOTALPERF));
             }catch (Exception e){
-                DF = new DecimalFormat("#,##");
+                DF = new DecimalFormat("#.##");
                 TOTALPROFIT = Double.valueOf(DF.format(TOTALPERF));
             }          
-=======
-            TOTALPROFIT = Double.valueOf(df.format(TOTALPROFIT));            
->>>>>>> parent of a759147... commit currencyProblem
         }else{
             System.out.println(INVESTCONTROL.getAllCodes().length);
             for(int i = 0; i < INVESTCONTROL.getAllCodes().length; i++){
                 PerformanceCalc(INVESTCONTROL.getAllCodes()[i][0], INVESTCONTROL.getAllCodes()[i][1]);
                 TOTALPERFORMANCEUNIT = TOTALPERFORMANCEUNIT + (PERFORMANCE*Integer.parseInt(INVESTCONTROL.getAllAmounts()[i]));
             }
-<<<<<<< HEAD
             try{
                 TOTALPERFORMANCEUNIT = Double.valueOf(DF.format(TOTALPERFORMANCEUNIT));
             }catch (Exception e){
-                DF = new DecimalFormat("#,##");
+                DF = new DecimalFormat("#.##");
                 TOTALPERFORMANCEUNIT = Double.valueOf(DF.format(TOTALPERFORMANCEUNIT));
             }   
             
-=======
-            TOTALPERFORMANCEUNIT = Double.valueOf(df.format(TOTALPERFORMANCEUNIT));
-
->>>>>>> parent of a759147... commit currencyProblem
             TOTALPRICES = 0;
             for(int i=0; i < INVESTCONTROL.getAllCodes().length; i++){
                 TOTALPRICES = TOTALPRICES + (Double.parseDouble(INVESTCONTROL.getAllCodes()[i][1]) * Integer.parseInt(INVESTCONTROL.getAllAmounts()[i]));
             }
             TOTALPERFORMANCEPERC = TOTALPERFORMANCEUNIT/TOTALPRICES*100;
-<<<<<<< HEAD
             try{
                 TOTALPERFORMANCEPERC = Double.valueOf(DF.format(TOTALPERFORMANCEPERC));
             }catch (Exception e){
-                DF = new DecimalFormat("#,##");
+                DF = new DecimalFormat("#.##");
                 TOTALPERFORMANCEPERC = Double.valueOf(DF.format(TOTALPERFORMANCEPERC));
             }  
-=======
-            TOTALPERFORMANCEPERC = Double.valueOf(df.format(TOTALPERFORMANCEPERC));
->>>>>>> parent of a759147... commit currencyProblem
             System.out.println(TOTALPERFORMANCEUNIT);
 
             if(!INVESTCONTROL.getToutLastPerf()[0].equals("NULL")){
@@ -216,22 +196,26 @@ public class PerformanceController {
                     TOTALPERFORMANCEALL = TOTALPERFORMANCEALL + Double.parseDouble(INVESTCONTROL.getToutLastPerf()[i]);
                     TOTALPROFIT = TOTALPROFIT + Double.parseDouble(INVESTCONTROL.getToutLastPerf()[i]);
                 }
-                TOTALPERFORMANCEALL = Double.valueOf(df.format(TOTALPERFORMANCEALL));
-                TOTALPROFIT = Double.valueOf(df.format(TOTALPROFIT));
+                
+                try{
+                    TOTALPERFORMANCEALL = Double.valueOf(DF.format(TOTALPERFORMANCEALL));
+                    TOTALPROFIT = Double.valueOf(DF.format(TOTALPROFIT));
+                }catch (Exception e){
+                    DF = new DecimalFormat("#.##");
+                    TOTALPERFORMANCEALL = Double.valueOf(DF.format(TOTALPERFORMANCEALL));
+                    TOTALPROFIT = Double.valueOf(DF.format(TOTALPROFIT));
+                }  
+                
 
                 TOTALGAINPERCENTAGE = TOTALPERFORMANCEALL/TOTALPRICES*100;
                 System.out.println(TOTALPERFORMANCEALL);
-<<<<<<< HEAD
                 try{
                     TOTALGAINPERCENTAGE = Double.valueOf(DF.format(TOTALGAINPERCENTAGE));
                 }catch (Exception e){
-                    DF = new DecimalFormat("#,##");
+                    DF = new DecimalFormat("#.##");
                     TOTALGAINPERCENTAGE = Double.valueOf(DF.format(TOTALGAINPERCENTAGE));
                 }  
                 
-=======
-                TOTALGAINPERCENTAGE = Double.valueOf(df.format(TOTALGAINPERCENTAGE));
->>>>>>> parent of a759147... commit currencyProblem
             }
         }
     }
@@ -267,7 +251,7 @@ public class PerformanceController {
     
     public String[][] getHistPrices(String code, String freq) throws IOException{
         getHistoricalPrices(code, freq);
-        return HISTORICAL;
+        return HISTORICALINFO;
     }
     
 }
