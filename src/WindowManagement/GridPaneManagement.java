@@ -44,10 +44,8 @@ public class GridPaneManagement {
         INVESTCONTROL = new InvestmentController();
         TOOLS = new ToolsUse();
         
-        if(!INVESTCONTROL.getAllCodes()[0][0].equals("NULL")){
+        if(TOOLS.FileMeasure("data/investment.txt", 1) > 0 || TOOLS.FileMeasure("data/investment.txt", 0) > 0){
             DSINV.DesignInv(GRID, TOP);
-        }else if (!INVESTCONTROL.getToutLastPerf()[0].equals("NULL") || TOOLS.FileMeasure("data/investment.txt", 1) > 0){
-            DSINV.DesignInvOnlyDeleted(GRID, TOP);
         }else{
             DSINV.DesignInvStart(GRID, TOP);
         }
@@ -60,6 +58,7 @@ public class GridPaneManagement {
         INVESTCONTROL = new InvestmentController();
         
         if(!INVESTCONTROL.getAllCodes()[0][0].equals("NULL")){
+            System.out.println("oi");
             DSPERF.DesignPerf(GRID, TOP);
         }else if (!INVESTCONTROL.getToutLastPerf()[0].equals("NULL")){
             DSPERF.DesignPerfOnlySold(GRID, TOP);

@@ -41,6 +41,7 @@ public class PerformanceController {
     private Integer COUNT;
     private DecimalFormat DF; 
     private StringBuilder BUILDER;
+    private ToolsUse TOOLS;
     
     private InvestmentController INVESTCONTROL;
     
@@ -100,6 +101,7 @@ public class PerformanceController {
     public String PerformanceCalc(String code, String price) throws IOException, ApiException{
         getCurrentPrice(code);
         DF = new DecimalFormat("#.##");
+        
         try{
             CURRENTPRICE = Double.valueOf(DF.format(CURRENTPRICE));
         }catch (Exception e){
@@ -152,6 +154,9 @@ public class PerformanceController {
         DF = new DecimalFormat("#,##");
         INVESTCONTROL = new InvestmentController();
         TOTALPERFORMANCEUNIT = 0;
+        
+        TOOLS = new ToolsUse();
+        
         if(INVESTCONTROL.getAllCodes()[0][0].equals("NULL")){
             TOTALPROFIT = 0;
             for(int i=0; i<INVESTCONTROL.getToutLastPerf().length; i++){
@@ -188,10 +193,11 @@ public class PerformanceController {
                 TOTALPERFORMANCEPERC = Double.valueOf(DF.format(TOTALPERFORMANCEPERC));
             }  
             System.out.println(TOTALPERFORMANCEUNIT);
-
+            System.out.println("AAAA" + TOOLS.FileMeasure("data/investment.txt", 0));
             if(!INVESTCONTROL.getToutLastPerf()[0].equals("NULL")){
                 TOTALPROFIT = 0;
                 TOTALPERFORMANCEALL = TOTALPERFORMANCEUNIT;
+                System.out.println("ALALALALU");
                 for(int i=0; i<INVESTCONTROL.getToutLastPerf().length; i++){
                     TOTALPERFORMANCEALL = TOTALPERFORMANCEALL + Double.parseDouble(INVESTCONTROL.getToutLastPerf()[i]);
                     TOTALPROFIT = TOTALPROFIT + Double.parseDouble(INVESTCONTROL.getToutLastPerf()[i]);
@@ -214,8 +220,17 @@ public class PerformanceController {
                 }catch (Exception e){
                     DF = new DecimalFormat("#.##");
                     TOTALGAINPERCENTAGE = Double.valueOf(DF.format(TOTALGAINPERCENTAGE));
-                }  
+                }    
                 
+                System.out.println("AAAA" + TOOLS.FileMeasure("data/investment.txt", 0));
+            }else if(TOOLS.FileMeasure("data/investment.txt", 0) >=0){
+                System.out.println("AAAA" + TOOLS.FileMeasure("data/investment.txt", 0));
+                DF = new DecimalFormat("#.##");
+                TOTALPERFORMANCEALL = TOTALPERFORMANCEUNIT;
+                System.out.println("ALALALALA");
+                TOTALPERFORMANCEALL = Double.valueOf(DF.format(TOTALPERFORMANCEALL));
+                TOTALGAINPERCENTAGE = TOTALPERFORMANCEUNIT/TOTALPRICES*100;
+                TOTALGAINPERCENTAGE = Double.valueOf(DF.format(TOTALGAINPERCENTAGE));
             }
         }
     }

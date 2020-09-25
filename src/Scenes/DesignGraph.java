@@ -77,8 +77,6 @@ public class DesignGraph {
         CHOICE.setFont(MYFONT.getOswaldRegular());
         CHOICE.setFill(Color.GRAY);
         
-   //     MIDGRAPH.add(CHOICE, 0, 0);
-        
         ObservableList<String> OPTIONS = FXCollections.observableArrayList("daily", "weekly", "monthly", "quarterly", "yearly");
         FREQUENCY = new ComboBox();
         FREQUENCY.setItems(OPTIONS);
@@ -92,11 +90,13 @@ public class DesignGraph {
                 String freq = (String) FREQUENCY.getValue();
                 HISTORICAL = PERF.getHistPrices(TICKER, freq);
                 
-                // Setting upper and lower bounds
+                // Setting upper and lower bounds and adding to series
                 Integer i = 0;
                 Double UPPER = Double.valueOf(HISTORICAL[0][0]);
                 Double LOWER = Double.valueOf(HISTORICAL[0][0]);
                 while(i < HISTORICAL.length){
+                    // adding to series
+                     SERIES.getData().add(new XYChart.Data(HISTORICAL[i][1],Double.parseDouble(HISTORICAL[i][0])));
                     // Find the maximum vlaue
                     if(UPPER < Double.valueOf(HISTORICAL[i][0])){
                         UPPER = Double.valueOf(HISTORICAL[i][0]);
@@ -110,12 +110,7 @@ public class DesignGraph {
                 // Set maximum and minimum on graph
                 UPPER = UPPER + (UPPER*10/100);
                 LOWER = LOWER - (LOWER*15/100);
-                
-                Integer INDEX = 0;
-                while(INDEX < HISTORICAL.length){
-                    SERIES.getData().add(new XYChart.Data(HISTORICAL[INDEX][1],Double.parseDouble(HISTORICAL[INDEX][0])));
-                    INDEX++;
-                }
+               
                 XAXIS = new CategoryAxis();
                 YAXIS = new NumberAxis(LOWER, UPPER, 5);
 

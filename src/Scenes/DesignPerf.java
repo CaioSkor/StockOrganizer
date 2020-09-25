@@ -90,6 +90,7 @@ public class DesignPerf {
         }
         
         if(PERF.getTotalPerformanceAll() > 0){
+            System.out.println("a");
             String MESSAGE3 = String.valueOf(PERF.getTotalPerformanceAll());
             GAINOVERRAL.setText("+ "+MESSAGE3 + " USD   ");
             GAINOVERRAL.setFill(Color.CHARTREUSE);

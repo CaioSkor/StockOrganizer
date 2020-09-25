@@ -169,6 +169,22 @@ public class DesignInv {
         TICKERS = new GetTicker();
         TOPMANAGE = new TopManagement();
         MYFONT = new MyFont();
+        MANAGE = new GridPaneManagement();
+        
+        Button BACKBTN = new Button();
+        BACKBTN.setText("BACK");
+        BACKBTN.getStyleClass().add("submitButton");
+        BACKBTN.setFont(MYFONT.getOswaldButton());
+        BACKBTN.setOnAction(event ->{
+            String TOPTITLE = "Investments";
+            GRID.getChildren().clear();
+            TOPMANAGE.ChangeTop(TOP, TOPTITLE);
+            try {
+                MANAGE.DesignInv(GRID, TOP);
+            } catch (IOException ex) {
+                Logger.getLogger(DesignInv.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         
         STOCKBTN = new Button[TOOLS.FileMeasure("data/investment.txt", 0)];
         
@@ -248,6 +264,7 @@ public class DesignInv {
         GRID.setHgap(40);
         GRID.setPadding(new Insets(0, 50, 50, 75));
         GRID.add(MID, 0, 0);
+        GRID.add(BACKBTN, 0, 10);
         
         return GRID;  
     }
