@@ -112,7 +112,7 @@ public class DesignAdd {
             FIELDSINFO[4] = REASON.getText();
             GRID.getChildren().clear();
             try {
-                PROCESSOR.createInvestment(
+               PROCESSOR.createInvestment(
                         FIELDSINFO[0],
                         FIELDSINFO[1],
                         FIELDSINFO[2],

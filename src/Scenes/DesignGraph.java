@@ -41,7 +41,7 @@ public class DesignGraph {
     HBox BOTTOM, MID;
     GridPane MIDCHOICE, MIDGRAPH, TOP;
     Button BACKBTN;
-    ComboBox FREQUENCY,TIMEFRAME;
+    ComboBox FREQUENCY;
     CategoryAxis XAXIS;
     NumberAxis YAXIS;
     LineChart<String, Number> LINECHART;
@@ -52,13 +52,11 @@ public class DesignGraph {
     Scene ENTRANCE;
     
     private DesignStock DSSTOCK;
-    private GridPaneManagement MANAGE;
     private TopManagement TOPMANAGE;
     private MyFont MYFONT;
     private PerformanceController PERF;
     
     public GridPane DesignGraph(GridPane GRID, VBox TOP, String TICKER, boolean DELETED) throws IOException, ApiException{
-        MANAGE = new GridPaneManagement();
         TOPMANAGE = new TopManagement();
         PERF = new PerformanceController();
         MYFONT = new MyFont();

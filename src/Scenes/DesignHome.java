@@ -29,15 +29,12 @@ public class DesignHome {
     private MyFont MYFONT;
     private DesignAdd DSADD;
     private TopManagement TOPMANAGE;
-    private DesignInv DSINV;
-    private DesignPerf DSPERF;
     private GridPaneManagement MANAGE;
     
     public GridPane DesignHome(GridPane GRID, VBox TOP){
         MYFONT = new MyFont();
         DSADD = new DesignAdd();
         TOPMANAGE = new TopManagement();
-        DSINV = new DesignInv();
         MANAGE = new GridPaneManagement();
         
         WELCOMETXT = new Text("Welcome to our software.");

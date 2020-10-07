@@ -12,7 +12,8 @@ import modules.Investment;
 import modules.LastPerformance;
 
 /**
- *
+ S
+ * 
  * @author caio
  */
 public class InvestmentController {

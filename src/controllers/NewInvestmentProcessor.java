@@ -16,10 +16,10 @@ import javafx.scene.layout.VBox;
  * @author caio
  */
 public class NewInvestmentProcessor {
-    private String[] INPUTS, INPUT, BLANK, CORRECT;
+    private String[] INPUTS, INPUT, BLANK;
     private String[] WRONGINPUTS;
     private boolean[] TYPECHECK, INPUTCHECK;
-    private Integer INDEX, COUNT, CHECK;
+    private Integer INDEX, COUNT;
     
     private InvestmentController INVESTCONTROL;
     private DesignAdd DSADD;
@@ -76,7 +76,7 @@ public class NewInvestmentProcessor {
         TOPMANAGE = new TopManagement();
         
         COUNT = 0;
-        CHECK = 0;
+        Integer CHECK = 0;
         
         INPUT = new String[4];
         INPUT[0] = "price";
